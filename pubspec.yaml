@@ -1,0 +1,90 @@
+name: resplash
+description: Exclusive HD Wallpaper Application
+
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 2.6.0+7
+
+environment:
+  sdk: ">=2.10.5 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.3
+  path_provider: ^1.6.24
+  permission_handler: ^5.0.0+hotfix.6
+  intl: ^0.16.1
+  flutter_downloader: ^1.5.2
+  cloud_firestore: ^0.14.3
+  font_awesome_flutter: ^8.5.0
+  dots_indicator: ^1.1.0
+  carousel_slider: ^3.0.0
+  sliding_up_panel: ^0.3.6
+  flutter_staggered_grid_view: ^0.3.0
+  provider: ^4.3.2+2
+  shared_preferences: ^0.5.12+4
+  google_sign_in: ^4.5.6
+  firebase_auth: ^0.18.3
+  connectivity: ^2.0.2
+  cached_network_image: ^2.3.3
+  launch_review: ^2.0.0
+  awesome_dialog: ^0.1.4
+  onesignal_flutter: ^2.4.1
+  shimmer: ^1.1.2
+  ext_storage: ^1.0.3
+  fzwallpaper: ^1.0.2
+  firebase_core: ^0.5.2
+  rounded_loading_button: ^1.0.15
+  firebase_admob: ^0.10.2
+  # facebook_audience_network: ^0.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: "^0.8.0"
+  flutter_native_splash: ^0.3.2
+
+
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.png"
+
+
+flutter_native_splash:
+  image: assets/images/splash.png
+  color: "ffffff"
+
+
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+
+    - assets/images/icon.png
+    - assets/images/splash.png
+
+  fonts:
+
+
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 800
