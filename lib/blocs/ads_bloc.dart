@@ -1,33 +1,25 @@
-import 'package:firebase_admob/firebase_admob.dart';
+// import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:resplash/models/config.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 class AdsBloc extends ChangeNotifier {
+
+
 
   @override
   void dispose() {
-    disposeAdmobInterstitialAd();      //admob
+    disposeInterstitialAd();      //admob
     //destroyFbAd();                       //fb
     super.dispose();
   }
 
 
   //admob Ads -------Start--------
+  InterstitialAd interstitialAd;
+  static const int maxFailedLoadAttempts = 3;
+  int _interstitialLoadAttempts = 0;
 
-  bool _admobInterstialAdClosed = false;
-  bool get admobInterStitialAdClosed => _admobInterstialAdClosed;
-
-  InterstitialAd _admobInterstitialAd;
-  InterstitialAd get admobInterstitialAd => _admobInterstitialAd;
-
-  MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    testDevices: [],
-    //keywords: <String>['photo', 'image', 'wallpaper'],
-    //contentUrl: '',
-    childDirected: false,
-    nonPersonalizedAds: true,
-  );
-
+/*
   InterstitialAd createAdmobInterstitialAd() {
     return InterstitialAd(
       adUnitId: Config().admobInterstitialAdId,
@@ -45,22 +37,64 @@ class AdsBloc extends ChangeNotifier {
       },
     );
   }
+*/
+  void createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: Config().admobAppId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          interstitialAd = ad;
+          _interstitialLoadAttempts = 0;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          _interstitialLoadAttempts += 1;
+          interstitialAd = null;
+          if (_interstitialLoadAttempts <= maxFailedLoadAttempts) {
+            createInterstitialAd();
+          }
+        },
 
-  Future loadAdmobInterstitialAd() async {
-    await _admobInterstitialAd?.dispose();
-    _admobInterstitialAd = createAdmobInterstitialAd()..load();
+      ),
+
+    );
     notifyListeners();
   }
 
-  Future disposeAdmobInterstitialAd() async {
-    _admobInterstitialAd?.dispose();
+  void showInterstitialAd() {
+    if (interstitialAd != null) {
+      interstitialAd.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          ad.dispose();
+          createInterstitialAd();
+          notifyListeners();
+        },
+        onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+          ad.dispose();
+          createInterstitialAd();
+          notifyListeners();
+        },
+      );
+      interstitialAd.show();
+      notifyListeners();
+    }
+  }
+  //
+  // Future loadAdmobInterstitialAd() async {
+  //   await _admobInterstitialAd?.dispose();
+  //   _admobInterstitialAd = createAdmobInterstitialAd()..load();
+  //   notifyListeners();
+  // }
+
+  Future disposeInterstitialAd() async {
+    interstitialAd.dispose();
     notifyListeners();
   }
 
-  showAdmobInterstitialAd() {
-    _admobInterstitialAd?.show();
-    notifyListeners();
-  }
+  // showAdmobInterstitialAd() {
+  //   _admobInterstitialAd?.show();
+  //   notifyListeners();
+  // }
 
   // admob ads --------- end --------
 

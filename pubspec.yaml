@@ -16,8 +16,9 @@ dependencies:
   path_provider: ^1.6.24
   permission_handler: ^5.0.0+hotfix.6
   intl: ^0.16.1
-  flutter_downloader: ^1.5.2
+  flutter_downloader: ^1.7.0
   cloud_firestore: ^0.14.3
+  google_mobile_ads: ^0.13.5
   font_awesome_flutter: ^8.5.0
   dots_indicator: ^1.1.0
   carousel_slider: ^3.0.0
@@ -29,6 +30,7 @@ dependencies:
   firebase_auth: ^0.18.3
   connectivity: ^2.0.2
   cached_network_image: ^2.3.3
+  image_downloader: ^0.30.0
   launch_review: ^2.0.0
   awesome_dialog: ^0.1.4
   onesignal_flutter: ^2.4.1

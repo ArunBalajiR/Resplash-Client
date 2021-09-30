@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   //-------admob--------
   initAdmobAd() {
     FirebaseAdMob.instance.initialize(appId: Config().admobAppId);
-    context.read<AdsBloc>().loadAdmobInterstitialAd();
+    context.read<AdsBloc>().createInterstitialAd();
   }
 
   //------fb-------
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                   Stack(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top: 40.0),
+                        padding: const EdgeInsets.only(top: 100.0),
                         child: CarouselSlider(
                           options: CarouselOptions(
                               enlargeStrategy: CenterPageEnlargeStrategy.height,

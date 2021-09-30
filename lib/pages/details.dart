@@ -1,5 +1,6 @@
 // details page
-
+import 'dart:isolate';
+import 'dart:ui';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,6 +9,7 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fzwallpaper/fzwallpaper.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -20,6 +22,9 @@ import '../blocs/userdata_bloc.dart';
 import '../models/config.dart';
 import '../models/icon_data.dart';
 import '../utils/circular_button.dart';
+
+ReceivePort _port = ReceivePort();
+
 
 class DetailsPage extends StatefulWidget {
   final String tag;
@@ -243,7 +248,7 @@ class _DetailsPageState extends State<DetailsPage> {
         btnOkText: 'Ok',
         dismissOnTouchOutside: false,
         btnOkOnPress: () {
-          context.read<AdsBloc>().showAdmobInterstitialAd();        //-------admob--------
+          context.read<AdsBloc>().showInterstitialAd();        //-------admob--------
           //context.read<AdsBloc>().showFbAdd();                        //-------fb--------
           
         }).show();
@@ -284,27 +289,55 @@ class _DetailsPageState extends State<DetailsPage> {
     if(ib.hasInternet == true){
       var path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_PICTURES);
       await FlutterDownloader.enqueue(
-      url: imageUrl,
-      savedDir: path,
-      fileName: '${Config().appName}-$catagory$timestamp',
-      showNotification: true, // show download progress in status bar (for Android)
-      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-    );
+        url: imageUrl,
+        savedDir: path,
+        fileName: '${Config().appName}-$catagory$timestamp.jpg',
+        showNotification: true, // show download progress in status bar (for Android)
+        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+      );
 
-    setState(() {
-      progress = 'Download Complete!\nCheck Your Status Bar';
-    });
+      setState(() {
+        progress = 'Download Complete!\nCheck Your Status Bar';
+      });
 
-    await Future.delayed(Duration(seconds: 2));
-    openCompleteDialog();
-      
+      await Future.delayed(Duration(seconds: 2));
+      openCompleteDialog();
+
     } else{
       setState(() {
-      progress = 'Check your internet connection!';
-    });
+        progress = 'Check your internet connection!';
+      });
     }
   }
 
+
+
+  @override
+  void initState() {
+    super.initState();
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState((){ });
+    });
+    context.read<AdsBloc>().createInterstitialAd();
+
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+    context.read<AdsBloc>().interstitialAd.dispose();
+  }
+
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
+    send.send([id, status, progress]);
+  }
 
 
 
