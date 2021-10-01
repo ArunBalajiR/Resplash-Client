@@ -16,10 +16,10 @@ import './pages/sign_in_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await MobileAds.instance.initialize();
   await FlutterDownloader.initialize(
     debug: true
   );
+  AdsBloc.initialization();
   runApp(MyApp());
   
   
@@ -47,10 +47,6 @@ class MyApp extends StatelessWidget {
           
           ChangeNotifierProvider<InternetBloc>(
             create: (context) => InternetBloc(),
-          ),
-
-          ChangeNotifierProvider<AdsBloc>(
-            create: (context) => AdsBloc(),
           ),
 
         ],

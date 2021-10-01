@@ -40,14 +40,16 @@ class DetailsPage extends StatefulWidget {
       this.timestamp})
       : super(key: key);
 
+
+
   @override
   _DetailsPageState createState() =>
       _DetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  
-  
+
+
   String tag;
   String imageUrl;
   String catagory;
@@ -55,7 +57,7 @@ class _DetailsPageState extends State<DetailsPage> {
   _DetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
 
 
-
+  AdsBloc admobHelper = new AdsBloc();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String progress = 'Set as Wallpaper or Download';
@@ -208,11 +210,6 @@ class _DetailsPageState extends State<DetailsPage> {
     });
   }
 
-
-
-
-
-
   handleStoragePermission() async {
     await Permission.storage.request().then((_) async {
       if (await Permission.storage.status == PermissionStatus.granted) {
@@ -248,9 +245,7 @@ class _DetailsPageState extends State<DetailsPage> {
         btnOkText: 'Ok',
         dismissOnTouchOutside: false,
         btnOkOnPress: () {
-          context.read<AdsBloc>().showInterstitialAd();        //-------admob--------
-          //context.read<AdsBloc>().showFbAdd();                        //-------fb--------
-          
+          admobHelper.showInterstitialAd();
         }).show();
   }
 
@@ -310,8 +305,6 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
-
-
   @override
   void initState() {
     super.initState();
@@ -322,7 +315,6 @@ class _DetailsPageState extends State<DetailsPage> {
       int progress = data[2];
       setState((){ });
     });
-    context.read<AdsBloc>().createInterstitialAd();
 
     FlutterDownloader.registerCallback(downloadCallback);
   }
@@ -331,7 +323,6 @@ class _DetailsPageState extends State<DetailsPage> {
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
-    context.read<AdsBloc>().interstitialAd.dispose();
   }
 
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
@@ -483,7 +474,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         } else{
                           openSetDialog();
                         }
-                        
+
                       },
                     ),
                     SizedBox(

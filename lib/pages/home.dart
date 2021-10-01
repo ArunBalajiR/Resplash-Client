@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
 import 'package:resplash/blocs/sign_in_bloc.dart';
+import 'package:resplash/pages/search.dart';
 import 'package:resplash/utils/dialog.dart';
 import '../blocs/data_bloc.dart';
 import '../blocs/internet_bloc.dart';
@@ -28,29 +28,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   int listIndex = 0;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  //-------admob--------
-  initAdmobAd() {
-    FirebaseAdMob.instance.initialize(appId: Config().admobAppId);
-    context.read<AdsBloc>().createInterstitialAd();
-  }
-
-  //------fb-------
-  // initFbAd() {
-  //   FacebookAudienceNetwork.init(testingId: '97a1eab4-1f62-4a40-9ab1-38f8d6298b8e',);
-  //   context.read<AdsBloc>().loadFbAd();
-  // }
+  AdsBloc admobHelper = new AdsBloc();
 
   Future getData() async {
     Future.delayed(Duration(milliseconds: 0)).then((f) {
       final sb = context.read<SignInBloc>();
       final db = context.read<DataBloc>();
-      sb.getUserDatafromSP()
-      .then((value) => db.getData())
-      .then((value) => db.getCategories());
+      sb
+          .getUserDatafromSP()
+          .then((value) => db.getData())
+          .then((value) => db.getCategories());
     });
   }
 
@@ -58,8 +48,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     OneSignal.shared.init(Config().onesignalAppId);
     getData();
-    initAdmobAd();          //-------admob--------
-    //initFbAd();              //-------fb--------
+    admobHelper.createInterstitialAd();
     super.initState();
   }
 
@@ -105,12 +94,17 @@ class _HomePageState extends State<HomePage> {
                                   shape: BoxShape.circle,
                                   color: Colors.grey[300],
                                   image: DecorationImage(
-                                      image: CachedNetworkImageProvider(
-                                        !context.watch<SignInBloc>().isSignedIn || context.watch<SignInBloc>().imageUrl == null
+                                      image: CachedNetworkImageProvider(!context
+                                                  .watch<SignInBloc>()
+                                                  .isSignedIn ||
+                                              context
+                                                      .watch<SignInBloc>()
+                                                      .imageUrl ==
+                                                  null
                                           ? Config().guestUserImage
-                                          : context.watch<SignInBloc>().imageUrl
-                                        )
-                                      )),
+                                          : context
+                                              .watch<SignInBloc>()
+                                              .imageUrl))),
                             ),
                             onTap: () {
                               !sb.isSignedIn
@@ -160,8 +154,8 @@ class _HomePageState extends State<HomePage> {
                                       return Container(
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          margin:
-                                              EdgeInsets.symmetric(horizontal: 0),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 0),
                                           child: InkWell(
                                             child: CachedNetworkImage(
                                               imageUrl: i['image url'],
@@ -182,10 +176,11 @@ class _HomePageState extends State<HomePage> {
                                                               20),
                                                       boxShadow: <BoxShadow>[
                                                         BoxShadow(
-                                                            color:
-                                                                Colors.grey[300],
+                                                            color: Colors
+                                                                .grey[300],
                                                             blurRadius: 30,
-                                                            offset: Offset(5, 20))
+                                                            offset:
+                                                                Offset(5, 20))
                                                       ],
                                                       image: DecorationImage(
                                                           image: imageProvider,
@@ -201,20 +196,24 @@ class _HomePageState extends State<HomePage> {
                                                                 .end,
                                                         children: <Widget>[
                                                           Column(
-                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: <Widget>[
                                                               Text(
-                                                                Config().hashTag,
+                                                                Config()
+                                                                    .hashTag,
                                                                 style: TextStyle(
                                                                     decoration:
                                                                         TextDecoration
                                                                             .none,
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 14),
+                                                                    fontSize:
+                                                                        14),
                                                               ),
                                                               Text(
                                                                 i['category'],
@@ -224,7 +223,8 @@ class _HomePageState extends State<HomePage> {
                                                                             .none,
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 25),
+                                                                    fontSize:
+                                                                        25),
                                                               )
                                                             ],
                                                           ),
@@ -233,11 +233,13 @@ class _HomePageState extends State<HomePage> {
                                                             Icons.favorite,
                                                             size: 25,
                                                             color: Colors.white
-                                                                .withOpacity(0.5),
+                                                                .withOpacity(
+                                                                    0.5),
                                                           ),
                                                           SizedBox(width: 2),
                                                           Text(
-                                                            i['loves'].toString(),
+                                                            i['loves']
+                                                                .toString(),
                                                             style: TextStyle(
                                                                 decoration:
                                                                     TextDecoration
@@ -260,11 +262,11 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               placeholder: (context, url) =>
                                                   LoadingWidget(),
-                                              errorWidget: (context, url, error) => Icon(
-                                                  Icons.error,
-                                                  size: 40,
-                                                ),
-
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                size: 40,
+                                              ),
                                             ),
                                             onTap: () {
                                               Navigator.push(
@@ -272,9 +274,10 @@ class _HomePageState extends State<HomePage> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailsPage(
-                                                              tag: i['timestamp'],
-                                                              imageUrl:
-                                                                  i['image url'],
+                                                              tag: i[
+                                                                  'timestamp'],
+                                                              imageUrl: i[
+                                                                  'image url'],
                                                               catagory:
                                                                   i['category'],
                                                               timestamp: i[
@@ -358,7 +361,17 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                     builder: (context) => BookmarkPage()));
                           },
-                        )
+                        ),
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.search,
+                              color: Colors.grey[600], size: 20),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchPage()));
+                          },
+                        ),
                       ],
                     ),
                   ),
