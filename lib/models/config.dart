@@ -3,7 +3,8 @@
 class Config {
   
   final String hashTag = '#reSplash';
-  final String appName = 'Resplash';
+  final String appName = 'ReSplash';
+  final String searchPageName = 'Looking for more high quality wallpapers ? ';
   final String packageName = 'com.arunbalaji.resplash';
   final String appVersion = '2.6.0';
   final String appIcon = 'assets/images/icon.png';
