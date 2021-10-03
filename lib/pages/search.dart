@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:resplash/models/config.dart';
+import 'package:resplash/widgets/categorytile.dart';
 import 'package:resplash/widgets/searchpersistent.dart';
 import 'package:sliver_fab/sliver_fab.dart';
 
@@ -12,8 +15,15 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   ScrollController controller;
+  Widget initTitle = Text(
+    Config().searchPageName,
+    style: TextStyle(
+      fontSize: 14,
+      color: Colors.white,
+    ),
+  );
   bool silverCollapsed = false;
-  String myTitle = Config().searchPageName;
+  // String myTitle = Config().searchPageName;
   TextEditingController t=new TextEditingController();
 
   @override
@@ -27,7 +37,15 @@ class _SearchPageState extends State<SearchPage> {
         if(!silverCollapsed){
           setState(() {
 
-            myTitle = Config().appName;
+            initTitle = Text(
+              Config().appName,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            );
             silverCollapsed = true;
           });
         }
@@ -35,7 +53,13 @@ class _SearchPageState extends State<SearchPage> {
       if (controller.offset <= 100 && !controller.position.outOfRange) {
         if(silverCollapsed){
           setState(() {
-            myTitle = Config().searchPageName;
+            initTitle =  Text(
+              Config().searchPageName,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            );
             silverCollapsed = false;
           });
         }
@@ -60,23 +84,19 @@ class _SearchPageState extends State<SearchPage> {
                 titlePadding: EdgeInsets.only(bottom: 50),
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 30.0,top: 30.0,left: 20,right: 10),
-                  child: Text(
-                    myTitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                  child: initTitle,
                 ),
 
-                background: Image.network(
-                  "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
-                  fit: BoxFit.cover,
-                )),
+                background: CustomPaint(
+                  foregroundPainter: FadingEffect(),
+                  child:Image.network(
+                    "https://github.com/ArunBalajiR/Flutter-Chat-Application/blob/main/images/cover.jpg?raw=true",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+            ),
             pinned: true,
-            expandedHeight: 300,
+            expandedHeight: 400,
             centerTitle: true,
             bottom: AppBar(
               shape: RoundedRectangleBorder(
@@ -114,23 +134,101 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ),
-          SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
-                  height: 100,
-                  child: Center(
-                    child: Text('eee'),
-                  ),
-                );
-              },
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.all(20.0),
+              child: Text("The Color tone",style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.only(left: 20.0,right: 20.0,bottom: 20.0),
+              height: 100.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ColorWidget(colorName: Colors.black87,),
+                  ColorWidget(colorName: Colors.grey,),
+                  ColorWidget(colorName: Colors.red,),
+                  ColorWidget(colorName: Colors.blue,),
+                  ColorWidget(colorName: Colors.green,),
+                  ColorWidget(colorName: Colors.amber),
+                  ColorWidget(colorName: Colors.pink,),
+                  ColorWidget(colorName: Colors.teal,),
+
+
+
+                ],
+
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.only(right: 20.0,left: 20.0),
+              child: Text("Categories",style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              height: 900.0,
+              child: GridView.count(
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                crossAxisCount: 2,
+                physics: NeverScrollableScrollPhysics(),
+
+                children: [
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
+                ],
+              ),
+
+
+            ),
+          ),
+
         ],
       ),
+    );
+  }
+}
+
+class ColorWidget extends StatelessWidget {
+  final Color colorName;
+  final url;
+  const ColorWidget({
+    Key key,
+    this.colorName,
+    this.url,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+
+      borderRadius: BorderRadius.all(Radius.circular(20)),
+      onTap: () {
+
+      },
+      child: Container(margin: EdgeInsets.all(12), height: 60, width: 60,decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)), color: colorName,
+      ),),
     );
   }
 }

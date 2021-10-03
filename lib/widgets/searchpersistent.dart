@@ -1,52 +1,23 @@
 import 'package:flutter/material.dart';
-class SABT extends StatefulWidget {
-  final Widget child;
-  const SABT({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
+
+class FadingEffect extends CustomPainter {
   @override
-  _SABTState createState() {
-    return new _SABTState();
+  void paint(Canvas canvas, Size size) {
+    Rect rect = Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height));
+    LinearGradient lg = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          //create 2 white colors, one transparent
+
+          Colors.transparent,
+          Colors.black,
+        ]);
+    Paint paint = Paint()..shader = lg.createShader(rect);
+    canvas.drawRect(rect, paint);
   }
+
+  @override
+  bool shouldRepaint(FadingEffect linePainter) => false;
 }
-class _SABTState extends State<SABT> {
-  ScrollPosition _position;
-  bool _visible;
-  @override
-  void dispose() {
-    _removeListener();
-    super.dispose();
-  }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _removeListener();
-    _addListener();
-  }
-  void _addListener() {
-    _position = Scrollable.of(context)?.position;
-    _position?.addListener(_positionListener);
-    _positionListener();
-  }
-  void _removeListener() {
-    _position?.removeListener(_positionListener);
-  }
-  void _positionListener() {
-    final FlexibleSpaceBarSettings settings =
-    context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
-    bool visible = settings == null || settings.currentExtent <= settings.minExtent;
-    if (_visible != visible) {
-      setState(() {
-        _visible = visible;
-      });
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Visibility(
-      visible: _visible,
-      child: widget.child,
-    );
-  }
-}
+   
