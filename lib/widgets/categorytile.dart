@@ -5,14 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 class CategoryTile extends StatelessWidget {
 
   final String imageURL,categoryName;
-  CategoryTile({this.imageURL,this.categoryName});
+  final Function redirectTo;
+  CategoryTile({this.imageURL,this.categoryName,this.redirectTo});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: redirectTo,
       child: Card(
         elevation: 7,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0),),

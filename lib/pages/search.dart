@@ -1,10 +1,14 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:resplash/models/categoryModel.dart';
 import 'package:resplash/models/config.dart';
+import 'package:resplash/pages/catagory_items.dart';
+import 'package:resplash/pages/searchingpage.dart';
 import 'package:resplash/widgets/categorytile.dart';
 import 'package:resplash/widgets/searchpersistent.dart';
-import 'package:sliver_fab/sliver_fab.dart';
+
 
 class SearchPage extends StatefulWidget {
   @override
@@ -14,7 +18,13 @@ class SearchPage extends StatefulWidget {
 
 
 class _SearchPageState extends State<SearchPage> {
+
+
+  List<CategorieModel> categories = [];
   ScrollController controller;
+
+
+
   Widget initTitle = Text(
     Config().searchPageName,
     style: TextStyle(
@@ -24,12 +34,12 @@ class _SearchPageState extends State<SearchPage> {
   );
   bool silverCollapsed = false;
   // String myTitle = Config().searchPageName;
-  TextEditingController t=new TextEditingController();
+  TextEditingController _tController =new TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
+    categories = getCategories();
     controller = ScrollController();
 
     controller.addListener(() {
@@ -69,6 +79,8 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -89,8 +101,8 @@ class _SearchPageState extends State<SearchPage> {
 
                 background: CustomPaint(
                   foregroundPainter: FadingEffect(),
-                  child:Image.network(
-                    "https://github.com/ArunBalajiR/Flutter-Chat-Application/blob/main/images/cover.jpg?raw=true",
+                  child:CachedNetworkImage(
+                    imageUrl: "https://github.com/ArunBalajiR/Flutter-Chat-Application/blob/main/images/cover.jpg?raw=true",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -114,13 +126,16 @@ class _SearchPageState extends State<SearchPage> {
                   color:Color.fromARGB(255, 40, 63, 77),
                   shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                   child: Container(
-                    width: MediaQuery.of(context).size.width/1.16,
-                    height: MediaQuery.of(context).size.height/17,
+                    width: width/1.16,
+                    height: height/17,
                     child: Center(
                       child: TextField(
-                        controller: t,
+                        controller: _tController,
+                        textInputAction: TextInputAction.search,
                         onSubmitted:(value) {
-
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                            return SearchItem(searchKeyword: _tController.text);
+                          }));
                         },
                         style: TextStyle(color:Colors.white70),
                         decoration: InputDecoration(prefixIcon: Icon(Icons.search,color:Colors.white70,),
@@ -151,14 +166,71 @@ class _SearchPageState extends State<SearchPage> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  ColorWidget(colorName: Colors.black87,),
-                  ColorWidget(colorName: Colors.grey,),
-                  ColorWidget(colorName: Colors.red,),
-                  ColorWidget(colorName: Colors.blue,),
-                  ColorWidget(colorName: Colors.green,),
-                  ColorWidget(colorName: Colors.amber),
-                  ColorWidget(colorName: Colors.pink,),
-                  ColorWidget(colorName: Colors.teal,),
+                  ColorWidget(
+                    colorName: Colors.black87,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "black");
+                      }));
+                    },
+
+                  ),
+                  ColorWidget(
+                    colorName: Colors.grey,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "white");
+                      }));
+                    },
+                  ),
+                  ColorWidget(
+                    colorName: Colors.red,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "red");
+                      }));
+                    },
+                  ),
+                  ColorWidget(
+                    colorName: Colors.blue,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "blue");
+                      }));
+                    },
+                  ),
+                  ColorWidget(
+                    colorName: Colors.green,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "green");
+                      }));
+                    },
+                  ),
+                  ColorWidget(
+                      colorName: Colors.amber,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "yellow");
+                      }));
+                    },
+                  ),
+                  ColorWidget(
+                    colorName: Colors.pink,
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "pink");
+                      }));
+                    },
+                  ),
+                  ColorWidget(
+                    colorName: Color(0xff39FF14),
+                    onPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                        return SearchItem(searchKeyword: "neon");
+                      }));
+                    },
+                  ),
 
 
 
@@ -180,8 +252,25 @@ class _SearchPageState extends State<SearchPage> {
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              height: 900.0,
-              child: GridView.count(
+              height: height-50,
+              child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 16,mainAxisSpacing: 16),
+                  itemCount: categories.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                      return CategoryTile(
+                        imageURL: categories[index].imgUrl,
+                        categoryName: categories[index].categorieName,
+                        redirectTo: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                          return SearchItem(searchKeyword: categories[index].categorieName);
+                        }));
+                      },
+                      );
+                  },
+              ),
+              /*
+              * GridView.count(
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 crossAxisCount: 2,
@@ -198,6 +287,8 @@ class _SearchPageState extends State<SearchPage> {
                   CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
                 ],
               ),
+              *
+              * */
 
 
             ),
@@ -212,10 +303,12 @@ class _SearchPageState extends State<SearchPage> {
 class ColorWidget extends StatelessWidget {
   final Color colorName;
   final url;
+  final Function onPress;
   const ColorWidget({
     Key key,
     this.colorName,
     this.url,
+    this.onPress,
   }) : super(key: key);
 
   @override
@@ -223,9 +316,7 @@ class ColorWidget extends StatelessWidget {
     return InkWell(
 
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      onTap: () {
-
-      },
+      onTap: onPress,
       child: Container(margin: EdgeInsets.all(12), height: 60, width: 60,decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)), color: colorName,
       ),),

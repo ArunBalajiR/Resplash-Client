@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class EmptyPage extends StatelessWidget {
   final String title;
+  final String subTitle;
   final icon;
-  const EmptyPage({Key key, @required this.title, @required this.icon}) : super(key: key);
+  const EmptyPage({Key key, @required this.title, this.subTitle, @required this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,16 @@ class EmptyPage extends StatelessWidget {
             fontSize: 16, 
             color: Colors.grey[600],
             
-          ),)
+          ),),
+          SizedBox(height: 20,),
+          Text(
+            subTitle ?? "",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[400],
+          )
+            ),
         ],
       ),
     );

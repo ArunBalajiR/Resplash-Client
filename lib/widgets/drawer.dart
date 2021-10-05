@@ -11,6 +11,7 @@ import '../pages/explore.dart';
 import '../pages/sign_in_page.dart';
 import '../utils/next_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class DrawerWidget extends StatefulWidget {
   DrawerWidget({Key key}) : super(key: key);
@@ -31,6 +32,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     'Explore',
     'Saved Items',
     'About App',
+    'Share App',
     'Rate & Review'
   ];
 
@@ -42,16 +44,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     FontAwesomeIcons.solidCompass,
     FontAwesomeIcons.solidHeart,
     FontAwesomeIcons.info,
-    FontAwesomeIcons.star
+    FontAwesomeIcons.share,
+    FontAwesomeIcons.star,
+
   ];
-
-
-
-  
-
-  
-
-
 
   Future openLogoutDialog(context1) async{
     showDialog(
@@ -118,6 +114,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     );
   }
 
+  void handleLanuch () {
+    Share.share(
+        'Check out this Udemy Amazing HD Wallpaper.\n\nGet Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash',
+        subject:'Get Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash');
+
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -177,6 +180,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         } else if (index == 3) {
                             aboutAppDialog();
                         } else if (index == 4){
+                          handleLanuch();
+
+                        }else if(index == 4){
                             handleRating();
                         }
                       },

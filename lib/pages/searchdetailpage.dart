@@ -1,65 +1,54 @@
 // details page
-import 'dart:isolate';
 import 'dart:ui';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fzwallpaper/fzwallpaper.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
-import 'package:resplash/utils/dialog.dart';
+import 'package:share/share.dart';
 import 'package:resplash/blocs/sign_in_bloc.dart';
 import '../blocs/data_bloc.dart';
 import '../blocs/internet_bloc.dart';
-import '../blocs/userdata_bloc.dart';
 import '../models/config.dart';
 import '../models/icon_data.dart';
 import '../utils/circular_button.dart';
 
-ReceivePort _port = ReceivePort();
-
-
-class DetailsPage extends StatefulWidget {
+class SearchDetailsPage extends StatefulWidget {
   final String tag;
   final String imageUrl;
   final String catagory;
   final String timestamp;
 
-  DetailsPage(
+  SearchDetailsPage(
       {Key key,
-      @required this.tag,
-      this.imageUrl,
-      this.catagory,
-      this.timestamp})
+        @required this.tag,
+        this.imageUrl,
+        this.catagory,
+        this.timestamp})
       : super(key: key);
 
-
-
   @override
-  _DetailsPageState createState() =>
-      _DetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
+  _SearchDetailsPageState createState() =>
+      _SearchDetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
 }
 
-class _DetailsPageState extends State<DetailsPage> {
+class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
 
   String tag;
   String imageUrl;
   String catagory;
   String timestamp;
-  _DetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
+  _SearchDetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
 
 
   AdsBloc admobHelper = new AdsBloc();
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String progress = 'Set as Wallpaper or Download';
   bool downloading = false;
@@ -67,6 +56,8 @@ class _DetailsPageState extends State<DetailsPage> {
   Icon dropIcon = Icon(Icons.arrow_upward);
   Icon upIcon = Icon(Icons.arrow_upward);
   Icon downIcon = Icon(Icons.arrow_downward);
+  Icon heartIcon = LoveIcon().greyIcon;
+  bool isPresseed = false;
   PanelController pc = PanelController();
   PermissionStatus status;
 
@@ -77,7 +68,7 @@ class _DetailsPageState extends State<DetailsPage> {
         return SimpleDialog(
           title: Text('SET AS'),
           contentPadding:
-              EdgeInsets.only(left: 30, top: 40, bottom: 20, right: 40),
+          EdgeInsets.only(left: 30, top: 40, bottom: 20, right: 40),
           children: <Widget>[
             ListTile(
               contentPadding: EdgeInsets.all(0),
@@ -106,6 +97,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 Navigator.pop(context);
               },
             ),
+
             SizedBox(
               height: 40,
             ),
@@ -127,8 +119,8 @@ class _DetailsPageState extends State<DetailsPage> {
   _setLockScreen() {
     Platform.isIOS
         ? setState(() {
-            progress = 'iOS is not supported';
-          })
+      progress = 'iOS is not supported';
+    })
         : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
     progressString.listen((data) {
       setState(() {
@@ -156,8 +148,8 @@ class _DetailsPageState extends State<DetailsPage> {
   _setHomeScreen() {
     Platform.isIOS
         ? setState(() {
-            progress = 'iOS is not supported';
-          })
+      progress = 'iOS is not supported';
+    })
         : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
     progressString.listen((data) {
       setState(() {
@@ -186,8 +178,8 @@ class _DetailsPageState extends State<DetailsPage> {
   _setBoth() {
     Platform.isIOS
         ? setState(() {
-            progress = 'iOS is not supported';
-          })
+      progress = 'iOS is not supported';
+    })
         : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
     progressString.listen((data) {
       setState(() {
@@ -259,10 +251,10 @@ class _DetailsPageState extends State<DetailsPage> {
             content: Text(
                 'You have to allow storage permission to download any wallpaper fro this app'),
             contentTextStyle:
-                TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
             actions: [
               TextButton(
-                child: Text('Open Settins'),
+                child: Text('Open Settings'),
                 onPressed: () async {
                   Navigator.pop(context);
                   await openAppSettings();
@@ -309,27 +301,13 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    // IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    // _port.listen((dynamic data) {
-    //   String id = data[0];
-    //   DownloadTaskStatus status = data[1];
-    //   int progress = data[2];
-    //   setState((){ });
-    // });
-
-    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   void dispose() {
-    // IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
-  }
 
 
 
@@ -363,10 +341,6 @@ class _DetailsPageState extends State<DetailsPage> {
           },
         ));
   }
-
-
-
-
 
   // floating ui
   Widget panelUI(db) {
@@ -412,25 +386,6 @@ class _DetailsPageState extends State<DetailsPage> {
                   ],
                 ),
                 Spacer(),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.favorite,
-                      color: Colors.pinkAccent,
-                      size: 22,
-                    ),
-                    StreamBuilder(
-                      stream: firestore
-                          .collection('contents')
-                          .doc(timestamp)
-                          .snapshots(),
-                      builder: (context, snap) {
-                        if (!snap.hasData) return _buildLoves(0);
-                        return _buildLoves(snap.data['loves']);
-                      },
-                    ),
-                  ],
-                ),
                 SizedBox(
                   width: 20,
                 ),
@@ -482,7 +437,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       height: 8,
                     ),
                     Text(
-                      'Set\nWallpaper',
+                      'Set\n Wallpaper',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
@@ -522,7 +477,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       height: 8,
                     ),
                     Text(
-                      'Download\nWallpaper',
+                      'Download\n Wallpaper',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
@@ -556,7 +511,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                       onTap: () {
                         Share.share(
-                            'Check out this Udemy Amazing HD Wallpaper\n\nGet Unlimited HD Wallpapers for FREE\n',
+                            'Check out this Udemy Amazing HD Wallpaper \n\nGet Unlimited HD Wallpapers for FREE\n',
                             subject:'Get Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash');
                       },
                     ),
@@ -573,6 +528,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     )
                   ],
                 ),
+
               ],
             ),
           ),
@@ -606,12 +562,6 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget _buildLoves(loves) {
-    return Text(
-      loves.toString(),
-      style: TextStyle(color: Colors.black54, fontSize: 16),
-    );
-  }
 
   // background ui
   Widget panelBodyUI(h, w) {
@@ -645,10 +595,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 height: 40,
                 width: 40,
                 decoration:
-                    BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                child: _buildLoveIcon(sb.uid)),
+                BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                child: heartIcon),
             onTap: () {
-              _loveIconPressed();
+              isPresseed = !isPresseed;
+              setState(() {
+                isPresseed == true ? heartIcon = LoveIcon().greyIcon : heartIcon = LoveIcon().pinkIcon;
+            });
             },
           ),
         ),
@@ -660,7 +613,7 @@ class _DetailsPageState extends State<DetailsPage> {
               height: 40,
               width: 40,
               decoration:
-                  BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: Icon(
                 Icons.close,
                 size: 25,
@@ -675,36 +628,4 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget _buildLoveIcon(uid) {
-    final sb = context.watch<SignInBloc>();
-    if (sb.guestUser == false) {
-      return StreamBuilder(
-        stream: firestore.collection('users').doc(uid).snapshots(),
-        builder: (context, snap) {
-          if (!snap.hasData) return LoveIcon().greyIcon;
-          List d = snap.data['loved items'];
-
-          if (d.contains(timestamp)) {
-            return LoveIcon().pinkIcon;
-          } else {
-            return LoveIcon().greyIcon;
-          }
-        },
-      );
-    } else {
-      return LoveIcon().greyIcon;
-    }
-  }
-
-
-
-
-  _loveIconPressed() async {
-    final sb = context.read<SignInBloc>();
-    if (sb.guestUser == false) {
-      context.read<UserBloc>().handleLoveIconClick(context, timestamp, sb.uid);
-    } else {
-      await showGuestUserInfo(context);
-    }
-  }
 }

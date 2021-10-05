@@ -7,6 +7,7 @@ class Config {
   final String searchPageName = 'Looking for more high quality wallpapers ? ';
   final String packageName = 'com.arunbalaji.resplash';
   final String appVersion = '2.6.0';
+  final String pexelsKey = '563492ad6f91700001000001321e0c2b0b6b490abf394188be84c307';
   final String appIcon = 'assets/images/icon.png';
   final String splashIcon = 'assets/images/splash.png';
   final String guestUserImage = 'http://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png';
