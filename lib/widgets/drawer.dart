@@ -12,6 +12,7 @@ import '../pages/sign_in_page.dart';
 import '../utils/next_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:resplash/models/dark_theme_provider.dart';
 
 class DrawerWidget extends StatefulWidget {
   DrawerWidget({Key key}) : super(key: key);
@@ -46,6 +47,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     FontAwesomeIcons.info,
     FontAwesomeIcons.share,
     FontAwesomeIcons.star,
+
 
   ];
 
@@ -124,7 +126,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   
   @override
   Widget build(BuildContext context) {
-
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     return Drawer(
       child: Padding(
           padding: const EdgeInsets.only(left: 15),
@@ -182,7 +184,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         } else if (index == 4){
                           handleLanuch();
 
-                        }else if(index == 4){
+                        }else if(index == 5){
                             handleRating();
                         }
                       },
@@ -194,8 +196,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               ),
 
-              
 
+              Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              SwitchListTile(
+                value: themeChange.darkTheme,
+                secondary:Icon(Icons.dark_mode),
+                onChanged: (value) {
+                  setState(() {
+                    themeChange.darkTheme = value;
+                  });
+                },
+                title: Text('Dark theme'),
+              ),
               Column(
                 children: [
                   !context.watch<SignInBloc>().isSignedIn

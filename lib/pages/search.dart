@@ -6,6 +6,7 @@ import 'package:resplash/models/categoryModel.dart';
 import 'package:resplash/models/config.dart';
 import 'package:resplash/pages/catagory_items.dart';
 import 'package:resplash/pages/searchingpage.dart';
+import 'package:resplash/widgets/cached_image.dart';
 import 'package:resplash/widgets/categorytile.dart';
 import 'package:resplash/widgets/searchpersistent.dart';
 
@@ -81,6 +82,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -89,9 +91,9 @@ class _SearchPageState extends State<SearchPage> {
           SliverAppBar(
 
             elevation: 0,
-            automaticallyImplyLeading : false,
+            // automaticallyImplyLeading : false,
             flexibleSpace: FlexibleSpaceBar(
-
+              collapseMode: CollapseMode.parallax,
                 centerTitle: true,
                 titlePadding: EdgeInsets.only(bottom: 50),
                 title: Padding(
@@ -101,14 +103,11 @@ class _SearchPageState extends State<SearchPage> {
 
                 background: CustomPaint(
                   foregroundPainter: FadingEffect(),
-                  child:CachedNetworkImage(
-                    imageUrl: "https://github.com/ArunBalajiR/Flutter-Chat-Application/blob/main/images/cover.jpg?raw=true",
-                    fit: BoxFit.cover,
-                  ),
+                  child: cachedSearchImage("https://github.com/ArunBalajiR/Flutter-Chat-Application/blob/main/images/cover.jpg?raw=true",),
                 ),
             ),
             pinned: true,
-            expandedHeight: 400,
+            expandedHeight: width/1.2,
             centerTitle: true,
             bottom: AppBar(
               shape: RoundedRectangleBorder(
@@ -117,34 +116,33 @@ class _SearchPageState extends State<SearchPage> {
                       topRight: Radius.circular(25.0)
                   )
               ),
-              toolbarHeight: 75,
+              toolbarHeight: 80,
               elevation:0,
               automaticallyImplyLeading : false,
               title: Container(
-                child: Card(
+                // width: width/1.16,
+                height: height/15,
+                margin: EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                decoration: BoxDecoration(
+                  color:  Color(0xfff3f3f4),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextField(
 
-                  color:Color.fromARGB(255, 40, 63, 77),
-                  shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                  child: Container(
-                    width: width/1.16,
-                    height: height/17,
-                    child: Center(
-                      child: TextField(
-                        controller: _tController,
-                        textInputAction: TextInputAction.search,
-                        onSubmitted:(value) {
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                            return SearchItem(searchKeyword: _tController.text);
-                          }));
-                        },
-                        style: TextStyle(color:Colors.white70),
-                        decoration: InputDecoration(prefixIcon: Icon(Icons.search,color:Colors.white70,),
-                          hintText: "Search wallpaper type etc..",border: InputBorder.none,
-                          hintStyle: TextStyle(color: Colors.white70,
-                              fontSize: 16),),
-                      ),
-                    ),
-                  ),
+                  controller: _tController,
+                  textInputAction: TextInputAction.search,
+                  onSubmitted:(value) {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                      return SearchItem(searchKeyword: _tController.text);
+                    }));
+                  },
+                  style: TextStyle(color:Colors.black),
+                  decoration: InputDecoration(prefixIcon: Icon(Icons.search,color:Colors.black,),
+                    fillColor: Color(0xfff3f3f4),
+                    hintText: "Search wallpaper type etc..",border: InputBorder.none,
+                    hintStyle: TextStyle(color: Colors.black,
+                        fontSize: 16),),
                 ),
               ),
             ),

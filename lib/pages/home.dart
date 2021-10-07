@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
         ? NoInternetPage()
         : Scaffold(
             key: _scaffoldKey,
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColor,
             endDrawer: DrawerWidget(),
             body: SafeArea(
               child: Column(
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                             Config().appName,
                             style: TextStyle(
                                 fontSize: 27,
-                                color: Colors.black,
+                                color: Theme.of(context).textSelectionTheme.selectionColor,
                                 fontWeight: FontWeight.w800),
                           ),
                           Spacer(),
@@ -121,7 +121,6 @@ class _HomePageState extends State<HomePage> {
                             icon: Icon(
                               FontAwesomeIcons.stream,
                               size: 20,
-                              color: Colors.black,
                             ),
                             onPressed: () {
                               _scaffoldKey.currentState.openEndDrawer();
@@ -169,14 +168,14 @@ class _HomePageState extends State<HomePage> {
                                                   top: 10,
                                                   bottom: 50),
                                               decoration: BoxDecoration(
-                                                  color: Colors.grey[200],
+                                                  color:Theme.of(context).shadowColor,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color:
-                                                            Colors.grey[300],
+                                                        color:Theme.of(context).shadowColor
+                                                            ,
                                                         blurRadius: 30,
 
                                                         offset: Offset(5, 20),)
@@ -202,8 +201,16 @@ class _HomePageState extends State<HomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: <Widget>[
-                                                          Text(
-                                                            Config().hashTag,
+                                                              Text(
+                                                              'Wall Of the Day',
+                                                              style: GoogleFonts.greatVibes(
+                                                              color: Colors.white,
+                                                              fontSize: 25,
+                                                              fontWeight: FontWeight.bold
+                                                              ),
+                                                              ),
+                                                                Text(
+                                                            i['category'],
                                                             style: TextStyle(
                                                                 decoration:
                                                                     TextDecoration
@@ -212,40 +219,23 @@ class _HomePageState extends State<HomePage> {
                                                                     .white,
                                                                 fontSize: 14),
                                                           ),
-                                                          Text(
-                                                            i['category'],
-                                                            style: TextStyle(
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 25),
-                                                          )
+
                                                         ],
                                                       ),
                                                       Spacer(),
                                                       Icon(
                                                         Icons.favorite,
                                                         size: 25,
-                                                        color: Colors.white
-                                                            .withOpacity(0.5),
+                                                        color: Colors.white.withOpacity(0.5),
                                                       ),
                                                       SizedBox(width: 2),
                                                       Text(
                                                         i['loves'].toString(),
                                                         style: TextStyle(
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .none,
-                                                            color: Colors
-                                                                .white
-                                                                .withOpacity(
-                                                                    0.7),
+                                                            decoration:TextDecoration.none,
+                                                            color: Colors.white.withOpacity(0.7),
                                                             fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                            fontWeight:FontWeight.w600),
                                                       ),
                                                       SizedBox(
                                                         width: 15,
@@ -282,22 +272,9 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }).toList(),
                       ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 30),
-                          child: Text(
-                            'Wall Of the Day',
-                            style: GoogleFonts.greatVibes(
-                              color: Colors.blueAccent,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ),
-                      ),
+
                       Positioned(
-                        bottom: 5,
+                        bottom: 1,
                         left: w * 0.34,
                         child: Container(
                           padding: EdgeInsets.all(12),
@@ -305,8 +282,8 @@ class _HomePageState extends State<HomePage> {
                             dotsCount: 5,
                             position: listIndex.toDouble(),
                             decorator: DotsDecorator(
-                              activeColor: Colors.black,
-                              color: Colors.black,
+                              activeColor: Theme.of(context).hintColor,
+                              color: Theme.of(context).hintColor,
                               spacing: EdgeInsets.all(3),
                               size: const Size.square(8.0),
                               activeSize: const Size(40.0, 6.0),
@@ -324,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                     height: 50,
                     width: w * 0.80,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: Theme.of(context).bottomAppBarColor,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
@@ -332,7 +309,8 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         IconButton(
                           icon: Icon(FontAwesomeIcons.dashcube,
-                              color: Colors.grey[600], size: 20),
+                              color: Theme.of(context).hintColor,
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -344,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         IconButton(
                           icon: Icon(FontAwesomeIcons.solidCompass,
-                              color: Colors.grey[600], size: 20),
+                              color: Theme.of(context).hintColor, size: 20),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -356,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         IconButton(
                           icon: Icon(FontAwesomeIcons.solidHeart,
-                              color: Colors.grey[600], size: 20),
+                              color:  Theme.of(context).hintColor, size: 20),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -368,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         IconButton(
                           icon: Icon(FontAwesomeIcons.search,
-                              color: Colors.grey[600], size: 20),
+                              color: Theme.of(context).hintColor, size: 20),
                           onPressed: () {
                             Navigator.push(
                               context,
