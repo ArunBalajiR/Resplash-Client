@@ -75,6 +75,7 @@ class _DetailsPageState extends State<DetailsPage> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text('SET AS'),
           contentPadding:
               EdgeInsets.only(left: 30, top: 40, bottom: 20, right: 40),
@@ -231,9 +232,10 @@ class _DetailsPageState extends State<DetailsPage> {
     AwesomeDialog(
         context: context,
         dialogType: DialogType.SUCCES,
-        tittle: 'Complete',
         animType: AnimType.SCALE,
         padding: EdgeInsets.all(30),
+        title:  'Complete',
+        dialogBackgroundColor : Theme.of(context).primaryColor,
         body: Center(
           child: Container(
               alignment: Alignment.center,
@@ -255,6 +257,7 @@ class _DetailsPageState extends State<DetailsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).primaryColor,
             title: Text('Grant Storage Permission to Download'),
             content: Text(
                 'You have to allow storage permission to download any wallpaper fro this app'),
@@ -343,7 +346,7 @@ class _DetailsPageState extends State<DetailsPage> {
         key: _scaffoldKey,
         body: SlidingUpPanel(
           controller: pc,
-          color: Colors.white.withOpacity(0.9),
+          color: Theme.of(context).primaryColor.withOpacity(0.9),
           minHeight: 120,
           maxHeight: 450,
           backdropEnabled: false,
@@ -380,7 +383,7 @@ class _DetailsPageState extends State<DetailsPage> {
               padding: EdgeInsets.only(top: 10),
               width: double.infinity,
               child: CircleAvatar(
-                backgroundColor: Colors.grey[800],
+                backgroundColor:  Theme.of(context).bottomAppBarColor,
                 child: dropIcon,
               ),
             ),
@@ -405,7 +408,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     Text(
                       '$catagory Wallpaper',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).textSelectionTheme.selectionColor,
                           fontSize: 18,
                           fontWeight: FontWeight.w600),
                     )
@@ -456,7 +459,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey[400],
+                                  color:Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -486,7 +489,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[800],
+                          color:Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -505,7 +508,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -526,7 +529,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[800],
+                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -545,7 +548,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -568,7 +571,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[800],
+                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -592,7 +595,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       progress,
                       style: TextStyle(
                           fontSize: 15,
-                          color: Colors.black87,
+                          color: Theme.of(context).textSelectionTheme.selectionColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -609,7 +612,7 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget _buildLoves(loves) {
     return Text(
       loves.toString(),
-      style: TextStyle(color: Colors.black54, fontSize: 16),
+      style: TextStyle(color: Theme.of(context).textSelectionTheme.selectionColor, fontSize: 16),
     );
   }
 
@@ -621,7 +624,7 @@ class _DetailsPageState extends State<DetailsPage> {
         Container(
           height: h,
           width: w,
-          color: Colors.grey[200],
+          color: Theme.of(context).shadowColor,
           child: Hero(
             tag: tag,
             child: CachedNetworkImage(
@@ -645,7 +648,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 height: 40,
                 width: 40,
                 decoration:
-                    BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    BoxDecoration(color: Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
                 child: _buildLoveIcon(sb.uid)),
             onTap: () {
               _loveIconPressed();
@@ -660,7 +663,7 @@ class _DetailsPageState extends State<DetailsPage> {
               height: 40,
               width: 40,
               decoration:
-                  BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                  BoxDecoration(color: Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
               child: Icon(
                 Icons.close,
                 size: 25,

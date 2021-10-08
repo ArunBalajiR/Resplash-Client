@@ -223,7 +223,8 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
     AwesomeDialog(
         context: context,
         dialogType: DialogType.SUCCES,
-        tittle: 'Complete',
+        title:  'Complete',
+        dialogBackgroundColor : Theme.of(context).primaryColor,
         animType: AnimType.SCALE,
         padding: EdgeInsets.all(30),
         body: Center(
@@ -247,6 +248,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).primaryColor,
             title: Text('Grant Storage Permission to Download'),
             content: Text(
                 'You have to allow storage permission to download any wallpaper fro this app'),
@@ -321,7 +323,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         key: _scaffoldKey,
         body: SlidingUpPanel(
           controller: pc,
-          color: Colors.white.withOpacity(0.9),
+          color: Theme.of(context).primaryColor.withOpacity(0.9),
           minHeight: 120,
           maxHeight: 450,
           backdropEnabled: false,
@@ -354,7 +356,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
               padding: EdgeInsets.only(top: 10),
               width: double.infinity,
               child: CircleAvatar(
-                backgroundColor: Colors.grey[800],
+                backgroundColor: Theme.of(context).bottomAppBarColor,
                 child: dropIcon,
               ),
             ),
@@ -379,7 +381,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                     Text(
                       '$catagory Wallpaper',
                       style: TextStyle(
-                          color: Colors.black,
+                          color:Theme.of(context).textSelectionTheme.selectionColor,
                           fontSize: 18,
                           fontWeight: FontWeight.w600),
                     )
@@ -411,7 +413,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -441,7 +443,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[800],
+                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -460,7 +462,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -481,7 +483,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[800],
+                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -500,7 +502,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -523,7 +525,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[800],
+                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -548,7 +550,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                       progress,
                       style: TextStyle(
                           fontSize: 15,
-                          color: Colors.black87,
+                          color:Theme.of(context).textSelectionTheme.selectionColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -571,7 +573,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         Container(
           height: h,
           width: w,
-          color: Colors.grey[200],
+          color: Theme.of(context).shadowColor,
           child: Hero(
             tag: tag,
             child: CachedNetworkImage(
@@ -595,7 +597,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                 height: 40,
                 width: 40,
                 decoration:
-                BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                BoxDecoration(color: Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
                 child: heartIcon),
             onTap: () {
               isPresseed = !isPresseed;
@@ -613,7 +615,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
               height: 40,
               width: 40,
               decoration:
-              BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              BoxDecoration(color:  Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
               child: Icon(
                 Icons.close,
                 size: 25,

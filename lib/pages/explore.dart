@@ -23,6 +23,7 @@ class _ExplorePageState extends State<ExplorePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       key: scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
@@ -44,7 +45,7 @@ class _ExplorePageState extends State<ExplorePage>
                   ),
                 )
               ],
-              labelColor: Colors.black,
+              labelColor: Theme.of(context).textSelectionTheme.selectionColor,
               indicatorColor: Colors.grey[900],
               unselectedLabelColor: Colors.grey,
             ),

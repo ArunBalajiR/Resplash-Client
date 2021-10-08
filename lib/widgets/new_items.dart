@@ -22,8 +22,7 @@ class _NewItemsState extends State<NewItems> with AutomaticKeepAliveClientMixin 
   ScrollController controller;
   DocumentSnapshot _lastVisible;
   bool _isLoading;
-  // ignore: deprecated_member_use
-  List<DocumentSnapshot> _data = new List<DocumentSnapshot>();
+  List<DocumentSnapshot> _data = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

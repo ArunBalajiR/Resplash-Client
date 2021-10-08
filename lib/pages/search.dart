@@ -9,6 +9,9 @@ import 'package:resplash/pages/searchingpage.dart';
 import 'package:resplash/widgets/cached_image.dart';
 import 'package:resplash/widgets/categorytile.dart';
 import 'package:resplash/widgets/searchpersistent.dart';
+import 'package:resplash/pages/internet.dart';
+import 'package:resplash/blocs/internet_bloc.dart';
+import 'package:provider/provider.dart';
 
 
 class SearchPage extends StatefulWidget {
@@ -53,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.black,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontWeight: FontWeight.bold,
               ),
             );
@@ -80,11 +83,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ib = context.watch<InternetBloc>();
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       body: CustomScrollView(
         controller: controller,
         slivers: <Widget>[
@@ -125,8 +129,8 @@ class _SearchPageState extends State<SearchPage> {
                 margin: EdgeInsets.symmetric(vertical: 5),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 decoration: BoxDecoration(
-                  color:  Color(0xfff3f3f4),
-                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: BorderRadius.circular(23),
                 ),
                 child: TextField(
 
@@ -134,14 +138,16 @@ class _SearchPageState extends State<SearchPage> {
                   textInputAction: TextInputAction.search,
                   onSubmitted:(value) {
                     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                      return SearchItem(searchKeyword: _tController.text);
+                      return  ib.hasInternet == false
+                          ? NoInternetPage()
+                          : SearchItem(searchKeyword: _tController.text);
                     }));
                   },
-                  style: TextStyle(color:Colors.black),
-                  decoration: InputDecoration(prefixIcon: Icon(Icons.search,color:Colors.black,),
+                  style: TextStyle(color:Theme.of(context).textSelectionTheme.selectionColor),
+                  decoration: InputDecoration(prefixIcon: Icon(Icons.search,color:Theme.of(context).textSelectionTheme.selectionColor,),
                     fillColor: Color(0xfff3f3f4),
                     hintText: "Search wallpaper type etc..",border: InputBorder.none,
-                    hintStyle: TextStyle(color: Colors.black,
+                    hintStyle: TextStyle(color: Theme.of(context).textSelectionTheme.selectionColor,
                         fontSize: 16),),
                 ),
               ),
@@ -152,7 +158,7 @@ class _SearchPageState extends State<SearchPage> {
               padding: EdgeInsets.all(20.0),
               child: Text("The Color tone",style: TextStyle(
                 fontSize: 20,
-                color: Colors.black,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontWeight: FontWeight.bold,
               ),),
             ),
@@ -168,7 +174,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Colors.black87,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "black");
+                        return ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "black");
                       }));
                     },
 
@@ -177,7 +185,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Colors.grey,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "white");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "white");
                       }));
                     },
                   ),
@@ -185,7 +195,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Colors.red,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "red");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "red");
                       }));
                     },
                   ),
@@ -193,7 +205,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Colors.blue,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "blue");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "blue");
                       }));
                     },
                   ),
@@ -201,7 +215,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Colors.green,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "green");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "green");
                       }));
                     },
                   ),
@@ -209,7 +225,9 @@ class _SearchPageState extends State<SearchPage> {
                       colorName: Colors.amber,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "yellow");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "yellow");
                       }));
                     },
                   ),
@@ -217,7 +235,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Colors.pink,
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "pink");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "pink");
                       }));
                     },
                   ),
@@ -225,7 +245,9 @@ class _SearchPageState extends State<SearchPage> {
                     colorName: Color(0xff39FF14),
                     onPress: (){
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                        return SearchItem(searchKeyword: "neon");
+                        return  ib.hasInternet == false
+                            ? NoInternetPage()
+                            : SearchItem(searchKeyword: "neon");
                       }));
                     },
                   ),
@@ -242,7 +264,7 @@ class _SearchPageState extends State<SearchPage> {
               padding: EdgeInsets.only(right: 20.0,left: 20.0),
               child: Text("Categories",style: TextStyle(
                 fontSize: 20,
-                color: Colors.black,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontWeight: FontWeight.bold,
               ),),
             ),
@@ -261,32 +283,14 @@ class _SearchPageState extends State<SearchPage> {
                         categoryName: categories[index].categorieName,
                         redirectTo: (){
                         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                          return SearchItem(searchKeyword: categories[index].categorieName);
+                          return  ib.hasInternet == false
+                              ? NoInternetPage()
+                              : SearchItem(searchKeyword: categories[index].categorieName);
                         }));
                       },
                       );
                   },
               ),
-              /*
-              * GridView.count(
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                crossAxisCount: 2,
-                physics: NeverScrollableScrollPhysics(),
-
-                children: [
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                  CategoryTile(categoryName: "Nature",imageURL: 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',),
-                ],
-              ),
-              *
-              * */
 
 
             ),

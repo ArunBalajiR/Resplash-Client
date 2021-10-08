@@ -8,11 +8,11 @@ import '../widgets/loading_animation.dart';
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: Theme.of(context).shadowColor,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                      color: Colors.grey[400],
+                      color: Theme.of(context).shadowColor,
                       blurRadius: 2,
                       offset: Offset(2, 2))
                 ],
@@ -30,7 +30,7 @@ Widget cachedSearchImage(imageUrl) {
     imageUrl: imageUrl,
     imageBuilder: (context, imageProvider) => Container(
       decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: Theme.of(context).shadowColor,
           image: DecorationImage(
               image: imageProvider,
               fit: BoxFit.cover)),

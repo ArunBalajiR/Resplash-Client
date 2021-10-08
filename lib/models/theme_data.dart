@@ -7,19 +7,20 @@ class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
 
     return ThemeData(
-      shadowColor: isDarkTheme ? Colors.black : Color(0xff181818),
+
+      shadowColor: isDarkTheme ? Colors.black : Colors.grey[300],
       scaffoldBackgroundColor: isDarkTheme ? Colors.black :Colors.grey.shade300,
-      primaryColor: isDarkTheme ? Color(0xff212121) : Colors.white,
-      primarySwatch: Colors.blue,
+      primaryColor: isDarkTheme ? Color(0xff010c1d) : Colors.white,
+      primarySwatch: Colors.grey,
       accentColor: Colors.grey,
-      backgroundColor: isDarkTheme ? Colors.grey.shade700 : Colors.white,
+      highlightColor: isDarkTheme ? Colors.black45 : Colors.grey.shade300,
+      backgroundColor: isDarkTheme ?  Color(0xff2a3344) : Color(0xfff3f3f4),
       indicatorColor: isDarkTheme ? Color(0xff0E1D36) : Color(0xffCBDCF8),
       buttonColor: isDarkTheme ? Color(0xff3B3B3B) : Color(0xffF1F5FB),
-      hintColor: isDarkTheme ? Colors.grey.shade300 : Colors.black,
-      bottomAppBarColor: isDarkTheme ? Colors.grey.shade800 : Colors.grey[200],
-      highlightColor: isDarkTheme ? Color(0xff372901) : Colors.blueAccent,
+      hintColor: isDarkTheme ? Colors.white : Colors.black,
+      bottomAppBarColor: isDarkTheme ? Color(0xff2a3344) : Colors.grey[200],
       hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
-      focusColor: isDarkTheme ? Color(0xff0B2512) : Colors.blueAccent,
+      focusColor: isDarkTheme ? Color(0xff0B2512) : Colors.grey,
       disabledColor: Colors.grey,
       cardColor: isDarkTheme ? Color(0xFF424242) : Colors.white,
       canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
@@ -29,13 +30,6 @@ class Styles {
       ),
       appBarTheme: AppBarTheme(
         brightness: Brightness.dark,
-        color: Colors.white,
-        textTheme: TextTheme(
-            headline6: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600)),
         elevation: 0,
         iconTheme: IconThemeData(
           color: isDarkTheme ? Colors.white : Colors.black,

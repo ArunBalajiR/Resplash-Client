@@ -33,7 +33,7 @@ dependencies:
   cached_network_image: ^2.3.3
   image_downloader: ^0.30.0
   launch_review: ^2.0.0
-  awesome_dialog: ^0.1.4
+  awesome_dialog: ^2.0.0
   onesignal_flutter: ^2.4.1
   shimmer: ^1.1.2
   sliver_fab: ^1.0.0

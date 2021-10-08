@@ -28,7 +28,7 @@ packages:
       name: awesome_dialog
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4"
+    version: "2.1.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -232,27 +232,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1+1"
-  firebase_messaging:
-    dependency: "direct main"
-    description:
-      name: firebase_messaging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.0.3"
-  flare_dart:
-    dependency: transitive
-    description:
-      name: flare_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.3.4"
   flare_flutter:
     dependency: transitive
     description:
       name: flare_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "3.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -286,20 +272,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.1"
-  flutter_local_notifications:
-    dependency: "direct main"
-    description:
-      name: flutter_local_notifications
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.3"
-  flutter_local_notifications_platform_interface:
+  flutter_lints:
     dependency: transitive
     description:
-      name: flutter_local_notifications_platform_interface
+      name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0+1"
+    version: "1.0.4"
   flutter_native_splash:
     dependency: "direct dev"
     description:
@@ -422,6 +401,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   matcher:
     dependency: transitive
     description:
@@ -583,13 +569,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.25.0"
-  sa_v1_migration:
-    dependency: transitive
-    description:
-      name: sa_v1_migration
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.2"
   share:
     dependency: "direct main"
     description:
@@ -652,7 +631,7 @@ packages:
       name: simple_animations
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.1"
+    version: "3.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -720,14 +699,14 @@ packages:
       name: supercharged
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.12.0"
+    version: "2.1.1"
   supercharged_dart:
     dependency: transitive
     description:
       name: supercharged_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "2.1.1"
   synchronized:
     dependency: transitive
     description:
@@ -749,13 +728,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
-  timezone:
-    dependency: transitive
-    description:
-      name: timezone
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.9"
   typed_data:
     dependency: transitive
     description:

@@ -22,12 +22,13 @@ class _CatagoryPageState extends State<CatagoryPage> {
     final db = context.watch<DataBloc>();
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         centerTitle: false,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text('Categories',
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             )),
       ),
       body: ListView.separated(
@@ -44,7 +45,7 @@ class _CatagoryPageState extends State<CatagoryPage> {
                     height: 140,
                     width: w,
                     decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: Theme.of(context).shadowColor,
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
                             image: CachedNetworkImageProvider(

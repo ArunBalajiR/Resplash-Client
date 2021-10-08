@@ -50,8 +50,14 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
         });
       });
     } on TimeoutException catch(_){
+      setState(() {
+        _isLoading = false;
+      });
       return "error";
     } on SocketException catch(_){
+      setState(() {
+        _isLoading = false;
+      });
       return "error";
     }
     return data;
@@ -72,13 +78,13 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         key: scaffoldKey,
         centerTitle: false,
         title: Text(
           widget.searchKeyword.toUpperCase(),
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(context).textSelectionTheme.selectionColor),
         ),
       ),
       body: FutureBuilder(
@@ -93,7 +99,7 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
                   child: CupertinoActivityIndicator()),
             ),
           ),):
-          snapshot.data.length == 0 ?
+          snapshot.data.length == 0 || snapshot.data.length == "error" ?
             EmptyPage(title: "No wallpapers found", subTitle: "Try with different keywords",icon: FontAwesomeIcons.heart) :
             StaggeredGridView.countBuilder(
                 itemCount: snapshot.data.length+1,

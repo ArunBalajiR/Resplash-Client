@@ -44,18 +44,19 @@ class LoadingWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                height: 15,
-                                width: 120,
+                                height: 10,
+                                width: 200,
                                 decoration: BoxDecoration(
                                     color: Colors.black12,
                                     borderRadius: BorderRadius.circular(25)),
                               ),
+
                               SizedBox(
                                 height: 20,
                               ),
                               Container(
-                                height: 10,
-                                width: 200,
+                                height: 15,
+                                width: 120,
                                 decoration: BoxDecoration(
                                     color: Colors.black12,
                                     borderRadius: BorderRadius.circular(25)),

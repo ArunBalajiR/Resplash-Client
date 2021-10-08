@@ -94,8 +94,10 @@ showGuestUserInfo(context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+            shape : RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
           contentPadding:
               EdgeInsets.only(left: 0, right: 0, top: 40, bottom: 0),
+          backgroundColor: Theme.of(context).primaryColor,
           content: Container(
               height: 350,
               child: Column(
@@ -107,7 +109,7 @@ showGuestUserInfo(context) {
                     width: 80,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.grey[300],
+                        color: Theme.of(context).shadowColor,
                         image: DecorationImage(
                             image: CachedNetworkImageProvider(Config().guestUserImage))),
                   ),
@@ -119,7 +121,7 @@ showGuestUserInfo(context) {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                        color: Theme.of(context).textSelectionTheme.selectionColor),
                   ),
                   SizedBox(
                     height: 15,
@@ -131,7 +133,7 @@ showGuestUserInfo(context) {
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Colors.grey),
+                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7)),
                     ),
                   ),
                   Spacer(),
@@ -163,8 +165,12 @@ showGuestUserInfo(context) {
                         child: InkWell(
                           child: Container(
                             height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(16) ),
+                              color: Colors.blue[400],
+                            ),
                             alignment: Alignment.center,
-                            color: Colors.blue[400],
+
                             child: Text(
                               'Maybe Later',
                               style: TextStyle(
