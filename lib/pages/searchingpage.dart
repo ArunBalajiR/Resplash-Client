@@ -90,7 +90,7 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
       body: FutureBuilder(
         future: getWallPaper(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return (snapshot.data==null)?Center(child: Center(
+          return (snapshot.data==null) ? Center(child: Center(
             child: new Opacity(
               opacity: _isLoading ? 1.0 : 0.0,
               child: new SizedBox(
@@ -99,7 +99,7 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
                   child: CupertinoActivityIndicator()),
             ),
           ),):
-          snapshot.data.length == 0 || snapshot.data.length == "error" ?
+          snapshot.data == "error" || snapshot.data.length ==0 ?
             EmptyPage(title: "No wallpapers found", subTitle: "Try with different keywords",icon: FontAwesomeIcons.heart) :
             StaggeredGridView.countBuilder(
                 itemCount: snapshot.data.length+1,
@@ -122,47 +122,49 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
                                 timestamp: DateTime.now().toString(),
                               )));
                     },
-                    child: Stack(
-                      children: [
-                        Hero(
-                            child: cachedImage(imgPath),
-                            tag: 'search$i',
-                        ),
-                        Positioned(
-                          bottom: 30,
-                          left: 10,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                Config().hashTag,
-                                style: TextStyle(color: Colors.white, fontSize: 14),
-                              ),
-                              Text(
-                                widget.searchKeyword.toUpperCase(),
-                                style: TextStyle(color: Colors.white, fontSize: 18),
-                              )
-                            ],
+                    child: ClipRRect(
+                      child: Stack(
+                        children: [
+                          Hero(
+                              child: cachedImage(imgPath),
+                              tag: 'search$i',
                           ),
-                        ),
-                        Positioned(
-                          right: 10,
-                          top: 20,
-                          child: Row(
-                            children: [
-                              Icon(Icons.favorite,
-                                  color: Colors.white.withOpacity(0.5), size: 25),
-                              Text(
-                                Random().nextInt(100).toString(),
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
+                          Positioned(
+                            bottom: 30,
+                            left: 10,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  Config().hashTag,
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                ),
+                                Text(
+                                  widget.searchKeyword.toUpperCase(),
+                                  style: TextStyle(color: Colors.white, fontSize: 18),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Positioned(
+                            right: 10,
+                            top: 20,
+                            child: Row(
+                              children: [
+                                Icon(Icons.favorite,
+                                    color: Colors.white.withOpacity(0.5), size: 25),
+                                Text(
+                                  Random().nextInt(100).toString(),
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.7),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                   );
