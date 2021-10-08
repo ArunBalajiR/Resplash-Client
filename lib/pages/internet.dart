@@ -9,6 +9,7 @@ class NoInternetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ib = context.watch<InternetBloc>();
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
               child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

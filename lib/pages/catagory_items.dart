@@ -111,13 +111,13 @@ class _CatagoryItemState extends State<CatagoryItem> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         key: scaffoldKey,
         centerTitle: false,
         title: Text(
           title,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color:Theme.of(context).textSelectionTheme.selectionColor),
         ),
       ),
       body: Column(

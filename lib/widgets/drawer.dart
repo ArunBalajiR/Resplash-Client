@@ -56,8 +56,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       context: context1,
       builder: (BuildContext context){
         return AlertDialog(
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text('Logout?', style: TextStyle(
-            fontWeight: FontWeight.w600
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
           ),),
           content: Text('Do you really want to Logout?'),
           actions: <Widget>[
@@ -132,15 +134,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           padding: const EdgeInsets.only(left: 15),
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 50, left: 0),
-                alignment: Alignment.center,
-                height: 150,
-                child: Text(
-                  Config().hashTag.toUpperCase(),
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
+          Padding(
+          padding: const EdgeInsets.only(top:28.0,bottom: 18.0),
+          child: Container(
+            height: 150,
+            width:  double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                image: DecorationImage(
+                    alignment: Alignment.center,
+                    fit: BoxFit.fitHeight,
+                    image:  AssetImage(Config().splashIcon)
+                )
+            ),),),
+              Divider(),
+              SizedBox(height:10),
               Expanded(
                 child: ListView.separated(
                   itemCount: title.length,

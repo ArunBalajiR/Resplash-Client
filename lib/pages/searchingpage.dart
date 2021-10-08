@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:resplash/pages/empty_page.dart';
+import 'package:resplash/pages/internet.dart';
 import 'package:resplash/pages/searchdetailpage.dart';
 import '../models/config.dart';
 import '../widgets/cached_image.dart';
@@ -100,8 +101,8 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
             ),
           ),):
           snapshot.data == "error" || snapshot.data.length ==0 ?
-            EmptyPage(title: "No wallpapers found", subTitle: "Try with different keywords",icon: FontAwesomeIcons.heart) :
-            StaggeredGridView.countBuilder(
+            snapshot.data == "error" ? NoInternetPage() :EmptyPage(title: "No wallpapers found", subTitle: "Try with different keywords",icon: FontAwesomeIcons.heart)
+            : StaggeredGridView.countBuilder(
                 itemCount: snapshot.data.length+1,
                 crossAxisCount: 4,
                 staggeredTileBuilder: (int index) => StaggeredTile.count(2, index.isEven ? 4 : 3),

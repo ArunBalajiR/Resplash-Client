@@ -99,7 +99,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           automaticallyImplyLeading: true,
           actions: [
@@ -136,6 +136,7 @@ class _SignInPageState extends State<SignInPage> {
                       Text(
                         'Welcome to ${Config().appName}!',
                         style: TextStyle(
+                            color: Theme.of(context).primaryColor,
                             fontSize: 25, fontWeight: FontWeight.w600),
                       ),
                       SizedBox(

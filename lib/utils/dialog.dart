@@ -27,8 +27,10 @@ showUserInfo(context, name, email, imageUrl) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape : RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
           contentPadding:
               EdgeInsets.only(left: 0, right: 0, top: 40, bottom: 0),
+          backgroundColor: Theme.of(context).primaryColor,
           content: Container(
               height: 300,
               child: Column(
@@ -51,7 +53,7 @@ showUserInfo(context, name, email, imageUrl) {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                        color: Theme.of(context).textSelectionTheme.selectionColor),
                   ),
                   SizedBox(
                     height: 15,
@@ -66,10 +68,14 @@ showUserInfo(context, name, email, imageUrl) {
                   Spacer(),
                   InkWell(
                     child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(16),bottomRight:Radius.circular(16) ),
+                        color: Colors.blue[400],
+                      ),
                       height: 50,
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.blueAccent,
+
                       child: Text(
                         'Ok, Got It',
                         style: TextStyle(
@@ -129,7 +135,7 @@ showGuestUserInfo(context) {
                   Padding(
                     padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Text(
-                      "You didn't sign in with ${Config().appName} yet. Sign in to unlock likes and save feature.\nDo you want to sign in now?",
+                      "You didn't sign in with ${Config().appName} yet. Sign in to unlock likes and save feature.\n\nDo you want to sign in now?",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -145,8 +151,12 @@ showGuestUserInfo(context) {
                         child: InkWell(
                           child: Container(
                             height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(16) ),
+                              color: Colors.blue[400],
+                            ),
                             alignment: Alignment.center,
-                            color: Colors.blueAccent,
+
                             child: Text(
                               'Yes, Now',
                               style: TextStyle(
@@ -166,8 +176,8 @@ showGuestUserInfo(context) {
                           child: Container(
                             height: 50,
                             decoration: BoxDecoration(
-                              borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(16) ),
-                              color: Colors.blue[400],
+                              borderRadius:  BorderRadius.only(bottomRight: Radius.circular(16) ),
+                              color:Theme.of(context).bottomAppBarColor,
                             ),
                             alignment: Alignment.center,
 
