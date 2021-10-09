@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -96,7 +98,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     showDialog(
         context: context,
         builder: (BuildContext coontext) {
+
           return AboutDialog(
+
             applicationVersion: Config().appVersion,
             applicationName: Config().appName,
             applicationIcon: Image(
@@ -134,10 +138,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           padding: const EdgeInsets.only(left: 15),
           child: Column(
             children: <Widget>[
+            SizedBox(height: 30),
+
           Padding(
           padding: const EdgeInsets.only(top:28.0,bottom: 18.0),
           child: Container(
-            height: 150,
+            height: 100,
             width:  double.infinity,
             decoration: BoxDecoration(
                 color: Colors.transparent,
@@ -147,8 +153,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     image:  AssetImage(Config().splashIcon)
                 )
             ),),),
+              Text(
+                Config().appName,
+                style: TextStyle(
+                    fontSize: 27,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
+                    fontWeight: FontWeight.w800),
+              ),
+              SizedBox(height:20),
               Divider(),
-              SizedBox(height:10),
+
+
+
               Expanded(
                 child: ListView.separated(
                   itemCount: title.length,
@@ -206,7 +222,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
 
               Divider(
-                thickness: 1,
+
                 color: Colors.grey,
               ),
               SwitchListTile(
@@ -256,6 +272,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 openLogoutDialog(context);
                               },
                             ),
+                      SizedBox(height: 20,),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text("Version : ${Config().appVersion}",style: TextStyle(
+                          color:Colors.grey.shade500,
+                        ),),
+                      ),
                     ],
                   ),
                 ],

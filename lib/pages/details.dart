@@ -21,6 +21,7 @@ import '../blocs/data_bloc.dart';
 import '../blocs/internet_bloc.dart';
 import '../blocs/userdata_bloc.dart';
 import '../models/config.dart';
+import 'package:http/http.dart';
 import '../models/icon_data.dart';
 import '../utils/circular_button.dart';
 
@@ -265,7 +266,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
             actions: [
               TextButton(
-                child: Text('Open Settins'),
+                child: Text('Open Settings'),
                 onPressed: () async {
                   Navigator.pop(context);
                   await openAppSettings();
@@ -280,6 +281,31 @@ class _DetailsPageState extends State<DetailsPage> {
             ],
           );
         });
+  }
+
+
+
+  void shareImage() async {
+    final ib = context.read<InternetBloc>();
+    await context.read<InternetBloc>().checkInternet();
+    if(ib.hasInternet == true) {
+      setState(() {
+        downloading = true;
+        progress = 'Sharing your wallpaper is in\nProgress...';
+      });
+      final response = await get(imageUrl);
+      final bytes = response.bodyBytes;
+      final Directory temp = await getTemporaryDirectory();
+      final File imageFile = File('${temp.path}/$timestamp'+'.jpg');
+      imageFile.writeAsBytesSync(bytes);
+      Share.shareFiles(['${temp.path}/$timestamp'+'.jpg'], text: 'Wallpaper found on ReSplash\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/resplash',);
+      await Future.delayed(Duration(seconds: 2));
+      setState(() {
+        downloading = false;
+        progress = 'Wallpaper \nShared..❤\n';
+      });
+    }
+
   }
 
   Future handleDownload() async {
@@ -558,9 +584,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
                       onTap: () {
-                        Share.share(
-                            'Check out this Udemy Amazing HD Wallpaper\n\nGet Unlimited HD Wallpapers for FREE\n',
-                            subject:'Get Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash');
+                        shareImage();
                       },
                     ),
                     SizedBox(

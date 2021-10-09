@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
         : Scaffold(
             key: _scaffoldKey,
             backgroundColor: Theme.of(context).primaryColor,
+            drawerScrimColor: Colors.black.withOpacity(0.54),
             endDrawer: DrawerWidget(),
             body: SafeArea(
               child: Column(
