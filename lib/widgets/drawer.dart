@@ -36,7 +36,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     'Saved Items',
     'About App',
     'Share App',
-    'Rate & Review'
+    'Rate & Review',
+    'Report',
+    'Follow us on\n Instagram'
   ];
 
 
@@ -49,6 +51,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     FontAwesomeIcons.info,
     FontAwesomeIcons.share,
     FontAwesomeIcons.star,
+    Icons.report,
+    FontAwesomeIcons.instagram,
 
 
   ];
@@ -124,7 +128,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   void handleLanuch () {
     Share.share(
-        'Check out this Udemy Amazing HD Wallpaper.\n\nGet Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash',
+        'Check out ${Config().appName}, this wallpaper app is really cool! http://onelink.to/resplash',
         subject:'Get Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash');
 
   }
@@ -138,10 +142,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           padding: const EdgeInsets.only(left: 15),
           child: Column(
             children: <Widget>[
-            SizedBox(height: 30),
-
+            SizedBox(height: 20),
           Padding(
-          padding: const EdgeInsets.only(top:28.0,bottom: 18.0),
+            padding: const EdgeInsets.only(top:28.0,bottom: 18.0),
           child: Container(
             height: 100,
             width:  double.infinity,
@@ -162,9 +165,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               SizedBox(height:20),
               Divider(),
-
-
-
               Expanded(
                 child: ListView.separated(
                   itemCount: title.length,
@@ -188,8 +188,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 
                                 title[index],
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500))
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400))
                             ],
                           ),
                         ),
