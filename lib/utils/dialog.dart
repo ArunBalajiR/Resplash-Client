@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resplash/models/config.dart';
 import 'package:resplash/pages/sign_in_page.dart';
+import 'package:resplash/pages/signin_page.dart';
 import 'package:resplash/utils/next_screen.dart';
 
 void openDialog(context, title, message) {
@@ -166,7 +167,8 @@ showGuestUserInfo(context) {
                           ),
                           onTap: () async {
                             Navigator.pop(context);
-                            nextScreenPopup(context, SignInPage(closeDialog: true,));
+                            // nextScreenPopup(context, SignInPage(closeDialog: true,));
+                            nextScreenPopup(context, SignInSplash());
                           },
                         ),
                       ),

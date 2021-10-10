@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:resplash/blocs/sign_in_bloc.dart';
+import 'package:resplash/pages/about_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/config.dart';
 import '../pages/bookmark.dart';
@@ -130,31 +131,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
 
 
-
-
-
-
-
-  aboutAppDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext coontext) {
-
-          return AboutDialog(
-
-            applicationVersion: Config().appVersion,
-            applicationName: Config().appName,
-            applicationIcon: Image(
-              height: 40,
-              width: 40,
-              image: AssetImage(Config().appIcon),
-            ),
-            applicationLegalese: 'Designed & Developed By CasberryTech Pvt Ltd',
-          );
-        });
-  }
-
-
   void handleRating () {
     LaunchReview.launch(
       androidAppId: Config().packageName,
@@ -220,7 +196,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       icons: FontAwesomeIcons.info,
                       title: "About App",
                       onTaps: (){
-                        aboutAppDialog();
+                        nextScreeniOS(context, About());
                       },
                     ),
                     Divider(color: Colors.grey.withOpacity(0.5),),

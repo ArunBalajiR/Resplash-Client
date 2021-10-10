@@ -61,6 +61,7 @@ flutter:
 
     - assets/images/icon.png
     - assets/images/splash.png
+    - assets/images/splashsign.jpg
 
   fonts:
 
