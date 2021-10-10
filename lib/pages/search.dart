@@ -107,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
 
                 background: CustomPaint(
                   foregroundPainter: FadingEffect(),
-                  child: cachedSearchImage("https://github.com/ArunBalajiR/Flutter-Chat-Application/blob/main/images/cover.jpg?raw=true",),
+                  child: cachedSearchImage("https://firebasestorage.googleapis.com/v0/b/admin-panel-b8640.appspot.com/o/Others%2Fsearchcover.jpg?alt=media&token=fff8c5ed-8f1a-47ea-b98c-9c8d9988e8c4",),
                 ),
             ),
             pinned: true,

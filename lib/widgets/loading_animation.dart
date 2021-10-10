@@ -22,7 +22,7 @@ class LoadingWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Flexible(
-                    flex: 2,
+                    flex: 3,
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.black12,

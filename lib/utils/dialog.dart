@@ -153,7 +153,7 @@ showGuestUserInfo(context) {
                             height: 50,
                             decoration: BoxDecoration(
                               borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(16) ),
-                              color: Colors.blue[400],
+                              color: Colors.blueAccent,
                             ),
                             alignment: Alignment.center,
 

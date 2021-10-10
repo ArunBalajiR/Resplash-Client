@@ -18,7 +18,7 @@ class NoInternetPage extends StatelessWidget {
             Icon(Icons.network_check, size : 100, color: Colors.blueAccent),
             SizedBox(height: 5,),
             Text('No Internet Connection!', style: TextStyle(
-              color: Colors.grey[800],
+              color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
               fontSize: 18,
               fontWeight: FontWeight.w600
 
