@@ -137,23 +137,7 @@ class _CatagoryItemState extends State<CatagoryItem> {
                     Hero(
                         tag: 'category$index',
                         child: cachedImage(d['image url'])),
-                    Positioned(
-                      bottom: 30,
-                      left: 10,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            Config().hashTag,
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                          Text(
-                            d['category'],
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
+
                     Positioned(
                       right: 10,
                       top: 20,

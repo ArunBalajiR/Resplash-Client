@@ -78,10 +78,6 @@ class BookmarkPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      Config().hashTag,
-                      style: TextStyle(color: Colors.white, fontSize: 14),
-                    ),
-                    Text(
                       d[index]['category'],
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     )

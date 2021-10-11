@@ -68,7 +68,7 @@ class About extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "ReSplash",
+                            Config().appName,
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               color: Theme.of(context).textSelectionTheme.selectionColor,

@@ -7,13 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
 import 'package:resplash/models/dark_theme_provider.dart';
 import 'package:resplash/models/theme_data.dart';
+import 'package:resplash/pages/signin_page.dart';
 import './blocs/bookmark_bloc.dart';
 import './blocs/data_bloc.dart';
 import './blocs/internet_bloc.dart';
 import './blocs/sign_in_bloc.dart';
 import './blocs/userdata_bloc.dart';
 import './pages/home.dart';
-import './pages/sign_in_page.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

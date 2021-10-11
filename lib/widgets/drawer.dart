@@ -7,12 +7,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:resplash/blocs/sign_in_bloc.dart';
 import 'package:resplash/pages/about_page.dart';
+import 'package:resplash/pages/signin_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/config.dart';
 import '../pages/bookmark.dart';
 import '../pages/catagories.dart';
 import '../pages/explore.dart';
-import '../pages/sign_in_page.dart';
+
 import '../utils/next_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -128,6 +129,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     );
 
   }
+
+
+
+
+
+
+
 
 
 

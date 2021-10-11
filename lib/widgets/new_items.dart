@@ -113,10 +113,7 @@ class _NewItemsState extends State<NewItems> with AutomaticKeepAliveClientMixin 
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          Config().hashTag,
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
+
                         Text(
                           d['category'],
                           style: TextStyle(color: Colors.white, fontSize: 18),

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resplash/models/config.dart';
-import 'package:resplash/pages/sign_in_page.dart';
+
 import 'package:resplash/pages/signin_page.dart';
 import 'package:resplash/utils/next_screen.dart';
 
@@ -167,8 +167,8 @@ showGuestUserInfo(context) {
                           ),
                           onTap: () async {
                             Navigator.pop(context);
-                            // nextScreenPopup(context, SignInPage(closeDialog: true,));
-                            nextScreenPopup(context, SignInSplash());
+                            nextScreenPopup(context, SignInPage(closeDialog: true,));
+
                           },
                         ),
                       ),
@@ -186,7 +186,7 @@ showGuestUserInfo(context) {
                             child: Text(
                               'Maybe Later',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
                               ),
                             ),
                           ),

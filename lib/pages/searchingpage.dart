@@ -131,23 +131,6 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
                               tag: 'search$i',
                           ),
                           Positioned(
-                            bottom: 30,
-                            left: 10,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  Config().hashTag,
-                                  style: TextStyle(color: Colors.white, fontSize: 14),
-                                ),
-                                Text(
-                                  widget.searchKeyword.toUpperCase(),
-                                  style: TextStyle(color: Colors.white, fontSize: 18),
-                                )
-                              ],
-                            ),
-                          ),
-                          Positioned(
                             right: 10,
                             top: 20,
                             child: Row(
