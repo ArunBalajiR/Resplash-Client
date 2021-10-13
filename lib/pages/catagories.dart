@@ -49,7 +49,8 @@ class _CatagoryPageState extends State<CatagoryPage> {
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
                             image: CachedNetworkImageProvider(
-                                db.categories[index]['thumbnail']),
+                                db.categories[index]['thumbnail'],
+                            ),
                             fit: BoxFit.cover)),
                     child: Align(
                       child: Text(db.categories[index]['name'],

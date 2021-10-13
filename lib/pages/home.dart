@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     OneSignal.shared.init(Config().onesignalAppId);
     getData();
-    admobHelper.createInterstitialAd();
+
     super.initState();
   }
 
@@ -61,7 +61,8 @@ class _HomePageState extends State<HomePage> {
     final ib = context.watch<InternetBloc>();
     final sb = context.watch<SignInBloc>();
 
-    return ib.hasInternet == false
+    return Material(
+      child: ib.hasInternet == false
         ? NoInternetPage()
         : Scaffold(
             key: _scaffoldKey,
@@ -202,24 +203,32 @@ class _HomePageState extends State<HomePage> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: <Widget>[
-                                                              Text(
-                                                              'Wall Of the Day',
-                                                              style: GoogleFonts.greatVibes(
-                                                              color: Colors.white,
-                                                              fontSize: 25,
-                                                              fontWeight: FontWeight.bold
+                                                              Material(
+                                                                type : MaterialType.transparency,
+                                                                child: Text(
+                                                                'Wall Of the Day',
+
+                                                                style: GoogleFonts.greatVibes(
+
+                                                                color: Colors.white,
+                                                                fontSize: 25,
+                                                                fontWeight: FontWeight.bold
+                                                                ),
+                                                                ),
                                                               ),
-                                                              ),
-                                                                Text(
+                                                                Material(
+                                                                  type: MaterialType.transparency,
+                                                                  child: Text(
                                                             i['category'],
                                                             style: TextStyle(
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14),
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .none,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 14),
                                                           ),
+                                                                ),
 
                                                         ],
                                                       ),
@@ -366,6 +375,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-          );
+          ),);
   }
 }

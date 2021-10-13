@@ -11,7 +11,7 @@ class About extends StatelessWidget {
   _openPrivacy() async {
     final Uri params = Uri(
       scheme: 'https',
-      path: 'casberry-tech.github.io/ReSplash/',
+      path: 'casberry-tech.github.io/ReFlix/',
     );
 
     var url = params.toString();
@@ -87,7 +87,7 @@ class About extends StatelessWidget {
                   Divider(color: Colors.grey.withOpacity(0.5),),
                   SizedBox(height: 10,),
                   Text(
-                    "ReSplash is being created to provide a new experience in wallpaper application. ReSplash follows a modern, "
+                    "${Config().appName} is being created to provide a new experience in wallpaper application. ${Config().appName} follows a modern, "
                         "easy to use UI but never compromises on the quality of wallpapers. ReSplash provides you with 2D Retouched Wallpapers as well as UHD/4K images from Pexels.com. "
                         "Thanks for downloading the app. Do rate and review. Feel free to send your feedback.",
                     style: TextStyle(color: Colors.blueGrey),
@@ -107,7 +107,7 @@ class About extends StatelessWidget {
                   Text(
                     "All the Images shown in this app belongs to their respective owners, this app is just a showcase for users to set wallpapers."
                         "Ads are placed to support myself.Wallpapers listed in this app are either from the public domain or Under creative common license or"
-                    ' submitted by the users or provided by the artists themselves or original content made by ReSplash Team. '
+                    ' submitted by the users or provided by the artists themselves or original content made by ${Config().appName} Team. '
                         'If any wallpaper violates any copyright rule then please report it with a screenshot through report button. After proper verification of the'
                     ' ownership, we will take it down.',
                     style: TextStyle(color: Colors.blueGrey),

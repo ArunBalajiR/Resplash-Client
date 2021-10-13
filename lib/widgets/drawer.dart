@@ -47,6 +47,22 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
   }
 
+  _requestWallpaper() async {
+    final Uri params = Uri(
+      scheme: 'https',
+      path: 'telegram.me/request_reflix_walls',
+    );
+
+    var url = params.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+
 
 
   Future openLogoutDialog(context1) async{
@@ -149,10 +165,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   void handleLanuch () {
     Share.share(
-        'Check out ${Config().appName}, this wallpaper app is really cool! http://onelink.to/resplash',
-        subject:'Get Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/resplash');
+        'Check out ${Config().appName}, this wallpaper app is really cool! http://onelink.to/reflix',
+        subject:'Get Unlimited HD Wallpapers for FREE.\nDownload the app from Playstore http://onelink.to/reflix');
 
   }
+
+
 
   
   @override
@@ -177,6 +195,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     image:  AssetImage(Config().splashIcon)
                 )
             ),),),
+
               Text(
                 Config().appName,
                 style: TextStyle(
@@ -235,7 +254,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     DrawerTile(
                       icons: FontAwesomeIcons.telegramPlane,
                       title: "Request your \nWallpaper",
-                      onTaps: (){},
+                      onTaps: (){
+                        _requestWallpaper();
+                      },
                     ),
                   ],
                 ),

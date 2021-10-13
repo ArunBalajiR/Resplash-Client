@@ -58,7 +58,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
   Icon dropIcon = Icon(Icons.arrow_upward);
   Icon upIcon = Icon(Icons.arrow_upward);
   Icon downIcon = Icon(Icons.arrow_downward);
-  Icon heartIcon = LoveIcon().greyIcon;
+  // Icon heartIcon = LoveIcon().greyIcon;
   bool isPresseed = false;
   PanelController pc = PanelController();
   PermissionStatus status;
@@ -241,7 +241,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         btnOkText: 'Ok',
         dismissOnTouchOutside: false,
         btnOkOnPress: () {
-          admobHelper.showInterstitialAd();
+          admobHelper.showInterad();
         }).show();
   }
 
@@ -612,24 +612,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
             ),
           ),
         ),
-        Positioned(
-          top: 60,
-          right: 20,
-          child: InkWell(
-            child: Container(
-                height: 40,
-                width: 40,
-                decoration:
-                BoxDecoration(color: Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
-                child: heartIcon),
-            onTap: () {
-              isPresseed = !isPresseed;
-              setState(() {
-                isPresseed == true ? heartIcon = LoveIcon().greyIcon : heartIcon = LoveIcon().pinkIcon;
-            });
-            },
-          ),
-        ),
+
         Positioned(
           top: 60,
           left: 20,

@@ -62,7 +62,7 @@ List<CategorieModel> getCategories() {
   //
   categorieModel.imgUrl =
   "https://images.pexels.com/photos/2116475/pexels-photo-2116475.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500";
-  categorieModel.categorieName = "Bikes";
+  categorieModel.categorieName = "Motor Bikes";
   categories.add(categorieModel);
   categorieModel = new CategorieModel();
 

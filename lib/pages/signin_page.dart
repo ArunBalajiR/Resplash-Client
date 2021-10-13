@@ -11,8 +11,6 @@ import '../pages/home.dart';
 import '../utils/next_screen.dart';
 import '../utils/snacbar.dart';
 
-
-
 class SignInPage extends StatefulWidget {
   const SignInPage({Key key, this.closeDialog}) : super(key: key);
   final bool closeDialog;
@@ -23,14 +21,15 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _buttonController =
+      RoundedLoadingButtonController();
 
   handleGuestUser() async {
     final sb = context.read<SignInBloc>();
     await sb.setGuestUser();
-    if(widget.closeDialog == null || widget.closeDialog == false){
+    if (widget.closeDialog == null || widget.closeDialog == false) {
       nextScreenCloseOthers(context, HomePage());
-    }else{
+    } else {
       Navigator.pop(context);
     }
   }
@@ -49,25 +48,26 @@ class _SignInPageState extends State<SignInPage> {
         } else {
           sb.checkUserExists().then((isUserExisted) async {
             if (isUserExisted) {
-              await sb.getUserDataFromFirebase(sb.uid)
+              await sb
+                  .getUserDataFromFirebase(sb.uid)
                   .then((value) => sb.guestSignout())
-                  .then((value) => sb.saveDataToSP()
-                  .then((value) => sb.setSignIn()
-                  .then((value) {
-                _buttonController.success();
-                handleAfterSignupGoogle();
-              })));
+                  .then((value) => sb
+                      .saveDataToSP()
+                      .then((value) => sb.setSignIn().then((value) {
+                            _buttonController.success();
+                            handleAfterSignupGoogle();
+                          })));
             } else {
-              sb.getTimestamp()
-                  .then((value) => sb.saveToFirebase()
+              sb.getTimestamp().then((value) => sb
+                  .saveToFirebase()
                   .then((value) => sb.increaseUserCount())
                   .then((value) => sb.guestSignout())
-                  .then((value) => sb.saveDataToSP()
-                  .then((value) => sb.setSignIn()
-                  .then((value) {
-                _buttonController.success();
-                handleAfterSignupGoogle();
-              }))));
+                  .then((value) => sb
+                      .saveDataToSP()
+                      .then((value) => sb.setSignIn().then((value) {
+                            _buttonController.success();
+                            handleAfterSignupGoogle();
+                          }))));
             }
           });
         }
@@ -75,35 +75,38 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-
   handleAfterSignupGoogle() {
     Future.delayed(Duration(milliseconds: 1000)).then((f) {
-      if(widget.closeDialog == null || widget.closeDialog == false){
+      if (widget.closeDialog == null || widget.closeDialog == false) {
         nextScreenCloseOthers(context, HomePage());
-      }else{
+      } else {
         Navigator.pop(context);
       }
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
     return Scaffold(
-      extendBodyBehindAppBar:true,
+      extendBodyBehindAppBar: true,
       key: _scaffoldKey,
       appBar: AppBar(
         title: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20,bottom: 20,left: 10),
-              child: Image(image : AssetImage(Config().splashIcon),height: 50,width: 50,color: Colors.white,),
+              padding: const EdgeInsets.only(top: 20, bottom: 20, left: 10),
+              child: Image(
+                image: AssetImage(Config().splashIcon),
+                height: 50,
+                width: 50,
+                color: Colors.white,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.only(right: 20,left: 10,bottom: 10,top: 10),
+              padding:
+                  EdgeInsets.only(right: 20, left: 10, bottom: 10, top: 10),
               child: Text(
                 Config().appName,
                 style: TextStyle(
@@ -120,24 +123,38 @@ class _SignInPageState extends State<SignInPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-
         actions: [
-          widget.closeDialog == null || widget.closeDialog == false ?
-          TextButton(
-              onPressed: () {
-                handleGuestUser();
-              },
-              child:  Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  ' Skip',
-                  style: GoogleFonts.rubik(
-                    fontSize: 15,
-                    color: Colors.white,
+          widget.closeDialog == null || widget.closeDialog == false
+              ? TextButton(
+                  onPressed: () {
+                    handleGuestUser();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      ' Skip',
+                      style: GoogleFonts.rubik(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              : TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      ' Skip',
+                      style: GoogleFonts.rubik(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-              ),)
-              : TextButton(child: Text("Skip"),onPressed:() =>  Navigator.of(context).pop(),),
         ],
       ),
       body: Container(
@@ -153,16 +170,15 @@ class _SignInPageState extends State<SignInPage> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               image: AssetImage('assets/images/bridge.jpg'),
-
             ),
             Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    Colors.black.withOpacity(.9),
-                    Colors.black.withOpacity(.8),
-                    Colors.transparent,
-                    Colors.black,
-                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+                Colors.black.withOpacity(.9),
+                Colors.black.withOpacity(.8),
+                Colors.transparent,
+                Colors.black,
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
             ),
             Positioned(
                 top: h / 1.35,
@@ -201,15 +217,13 @@ class _SignInPageState extends State<SignInPage> {
                     ],
                   ),
                 )),
-
-
             Positioned(
-              top: h/1.12,
-              left: w/60,
-              right: w/60,
+              top: h / 1.12,
+              left: w / 60,
+              right: w / 60,
               child: Container(
-
                 child: RoundedLoadingButton(
+
                   successColor: Colors.blueAccent,
                   child: Wrap(
                     children: [

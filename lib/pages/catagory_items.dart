@@ -45,8 +45,8 @@ class _CatagoryItemState extends State<CatagoryItem> {
   ScrollController controller;
   DocumentSnapshot _lastVisible;
   bool _isLoading;
-  // ignore: deprecated_member_use
-  List<DocumentSnapshot> _data = new List<DocumentSnapshot>();
+
+  List<DocumentSnapshot> _data = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
 
@@ -79,11 +79,11 @@ class _CatagoryItemState extends State<CatagoryItem> {
       }
     } else {
       setState(() => _isLoading = false);
-      // ignore: deprecated_member_use
-      scaffoldKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text('No more posts!'),
-        ),
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('No more posts!',style: TextStyle(color: Colors.grey)),
+            backgroundColor: Theme.of(context).bottomAppBarColor,
+          )
       );
     }
     return null;

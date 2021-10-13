@@ -72,8 +72,8 @@ class BookmarkPage extends StatelessWidget {
                   tag: 'bookmark$index',
                   child: cachedImage(d[index]['image url'])),
               Positioned(
-                bottom: 30,
-                left: 10,
+                bottom: 15,
+                left: 12,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

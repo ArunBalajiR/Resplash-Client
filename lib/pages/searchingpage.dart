@@ -131,8 +131,8 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
                               tag: 'search$i',
                           ),
                           Positioned(
-                            right: 10,
-                            top: 20,
+                            bottom: 15,
+                            right: 20,
                             child: Row(
                               children: [
                                 Icon(Icons.favorite,

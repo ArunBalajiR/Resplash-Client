@@ -60,12 +60,15 @@ class _PopularItemsState extends State<PopularItems> with AutomaticKeepAliveClie
       }
     } else {
       setState(() => _isLoading = false);
-      // ignore: deprecated_member_use
-      scaffoldKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text('No more posts!'),
-        ),
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('No more posts!',style: TextStyle(color: Colors.grey)),
+              backgroundColor: Theme.of(context).bottomAppBarColor,
+
+
+          )
       );
+
     }
     return null;
   }
@@ -109,8 +112,8 @@ class _PopularItemsState extends State<PopularItems> with AutomaticKeepAliveClie
                       tag: 'popular$index',
                       child: cachedImage(d['image url'])),
                   Positioned(
-                    bottom: 30,
-                    left: 10,
+                    bottom: 15,
+                    left: 12,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[

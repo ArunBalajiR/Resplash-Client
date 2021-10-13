@@ -98,7 +98,7 @@ class LoadingWidget1 extends StatelessWidget {
               child: Column(
                 children: [
                   Flexible(
-                    flex: 5,
+                    flex: 7,
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.black12,

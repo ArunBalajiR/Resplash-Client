@@ -1,4 +1,4 @@
-package com.arunbalaji.resplash
+package com.arunbalaji.reflix
 
 import io.flutter.embedding.android.FlutterActivity
 

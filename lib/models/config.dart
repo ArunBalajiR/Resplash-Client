@@ -5,7 +5,7 @@ class Config {
   final String hashTag = '#reFlix';
   final String appName = 'ReFlix';
   final String searchPageName = 'Looking for more high quality wallpapers ? ';
-  final String packageName = 'com.arunbalaji.resplash';
+  final String packageName = 'com.arunbalaji.reflix';
   final String appVersion = '1.0.0';
   final String pexelsKey = '563492ad6f91700001000001321e0c2b0b6b490abf394188be84c307';
   final String appIcon = 'assets/images/icon.png';
