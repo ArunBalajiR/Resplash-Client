@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../models/config.dart';
 import '../pages/details.dart';
 import '../widgets/cached_image.dart';
+import 'package:flutter/services.dart';
 
 class CatagoryItem extends StatefulWidget {
   final String title;
@@ -109,7 +110,7 @@ class _CatagoryItemState extends State<CatagoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(

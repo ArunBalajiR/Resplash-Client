@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fzwallpaper/fzwallpaper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -216,11 +217,15 @@ class _DetailsPageState extends State<DetailsPage> {
   handleStoragePermission() async {
     await Permission.storage.request().then((_) async {
       if (await Permission.storage.status == PermissionStatus.granted) {
+        // if(admobHelper.getpreRewardpoint() > admobHelper.getrewardpoint()){
+          await handleDownload();
+        // }else
+        //   print("ad paara");
 
-        await handleDownload();
 
       } else if (await Permission.storage.status == PermissionStatus.denied) {
       } else if (await Permission.storage.status == PermissionStatus.permanentlyDenied) {
+
         askOpenSettingsDialog();
       }
     });
@@ -339,14 +344,14 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   void initState() {
-    super.initState();
+
     admobHelper.createRewardedAd();
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   void dispose() {
-    // IsolateNameServer.removePortNameMapping('downloader_send_port');
+
     super.dispose();
   }
 

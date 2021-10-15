@@ -20,6 +20,7 @@ import '../pages/explore.dart';
 import '../pages/internet.dart';
 import '../widgets/drawer.dart';
 import '../widgets/loading_animation.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -55,11 +56,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     final db = context.watch<DataBloc>();
     final ib = context.watch<InternetBloc>();
     final sb = context.watch<SignInBloc>();
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Theme.of(context).primaryColor,
+      statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+    ));
 
     return Material(
       child: ib.hasInternet == false

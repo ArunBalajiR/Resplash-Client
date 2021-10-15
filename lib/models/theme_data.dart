@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Styles {
 
@@ -28,15 +29,24 @@ class Styles {
       buttonTheme: Theme.of(context).buttonTheme.copyWith(
           colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light(),
       ),
-      appBarTheme: AppBarTheme(
+
+      appBarTheme: isDarkTheme ? AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         brightness: Brightness.dark,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: isDarkTheme ? Colors.white : Colors.black,
+        ),
+      ) : AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        brightness: Brightness.light,
         elevation: 0,
         iconTheme: IconThemeData(
           color: isDarkTheme ? Colors.white : Colors.black,
         ),
       ),
 
-      textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ? Colors.white : Colors.black),
+        textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ? Colors.white : Colors.black),
     );
   }
 }

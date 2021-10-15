@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 class AdsBloc extends ChangeNotifier{
 
   int _rewardedPoint = 0 ;
+  int _preReward = -1;
 
   int getrewardpoint() => _rewardedPoint;
+  int getpreRewardpoint() => _preReward;
 
 
   InterstitialAd _interstitialAd;
@@ -57,9 +59,6 @@ class AdsBloc extends ChangeNotifier{
         ad.dispose();
         createRewardedAd();
       },
-      onAdWillDismissFullScreenContent: (ad) {
-        print("pleasee dont");
-      },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
@@ -69,16 +68,8 @@ class AdsBloc extends ChangeNotifier{
     );
     _rewardedAd.setImmersiveMode(true);
     _rewardedAd.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
-      int preReward = _rewardedPoint;
-      _rewardedPoint += reward.amount;
-      if(preReward<_rewardedPoint){
         onEnd;
-      }else{
-        print("ad parra mayiru");
-      }
-
-
-      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
+        print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
     });
     _rewardedAd = null;
   }
@@ -112,7 +103,6 @@ class AdsBloc extends ChangeNotifier{
     if(_interstitialAd == null){
       return;
     }
-
     _interstitialAd.fullScreenContentCallback = FullScreenContentCallback(
 
         onAdShowedFullScreenContent: (InterstitialAd ad){

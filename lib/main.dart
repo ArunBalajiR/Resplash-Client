@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -22,7 +23,11 @@ void main() async {
   await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: true);
   AdsBloc.initialization();
+
+
+
   //----
+
 
   RequestConfiguration configuration =
   RequestConfiguration(testDeviceIds: testDeviceIds);
@@ -50,6 +55,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+
+
     getCurrentAppTheme();
     super.initState();
   }

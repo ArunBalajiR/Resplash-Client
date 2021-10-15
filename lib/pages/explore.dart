@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:resplash/widgets/new_items.dart';
 import 'package:resplash/widgets/popular_items.dart';
 
@@ -22,6 +23,7 @@ class _ExplorePageState extends State<ExplorePage>
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       key: scaffoldKey,
