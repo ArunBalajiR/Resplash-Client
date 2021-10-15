@@ -136,7 +136,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         downloading = false;
         progress = progress;
       });
-
+      admobHelper.createInterad();
       openCompleteDialog();
     }, onError: (error) {
       setState(() {
@@ -166,7 +166,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         downloading = false;
         progress = progress;
       });
-
+      admobHelper.createInterad();
       openCompleteDialog();
     }, onError: (error) {
       setState(() {
@@ -195,7 +195,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         downloading = false;
         progress = progress;
       });
-
+      admobHelper.createInterad();
       openCompleteDialog();
     }, onError: (error) {
       setState(() {
@@ -288,7 +288,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
       final Directory temp = await getTemporaryDirectory();
       final File imageFile = File('${temp.path}/$timestamp'+'.jpg');
       imageFile.writeAsBytesSync(bytes);
-      Share.shareFiles(['${temp.path}/$timestamp'+'.jpg'], text: 'Wallpaper found on ReSplash\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/resplash',);
+      Share.shareFiles(['${temp.path}/$timestamp'+'.jpg'], text: 'Wallpaper found on ${Config().appName}\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/reflix',);
       await Future.delayed(Duration(seconds: 2));
       setState(() {
         downloading = false;
@@ -327,6 +327,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
   @override
   void initState() {
+    admobHelper.createRewardedAd();
     super.initState();
   }
 
@@ -381,7 +382,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
               padding: EdgeInsets.only(top: 10),
               width: double.infinity,
               child: CircleAvatar(
-                backgroundColor: Theme.of(context).bottomAppBarColor,
+                backgroundColor: Colors.blueAccent,
                 child: dropIcon,
               ),
             ),
@@ -497,7 +498,8 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                         ),
                       ),
                       onTap: () {
-                        handleStoragePermission();
+
+                        admobHelper.showRewardedAd(handleStoragePermission());
                       },
                     ),
                     SizedBox(
@@ -599,16 +601,20 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
           color: Theme.of(context).shadowColor,
           child: Hero(
             tag: tag,
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover)),
+            child: InteractiveViewer(
+              minScale: 0.1,
+              maxScale: 1.6,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                ),
+                placeholder: (context, url) => Icon(Icons.image),
+                errorWidget: (context, url, error) =>
+                    Center(child: Icon(Icons.error)),
               ),
-              placeholder: (context, url) => Icon(Icons.image),
-              errorWidget: (context, url, error) =>
-                  Center(child: Icon(Icons.error)),
             ),
           ),
         ),

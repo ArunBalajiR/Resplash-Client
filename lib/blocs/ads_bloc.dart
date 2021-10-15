@@ -1,17 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:resplash/models/config.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 
+class AdsBloc extends ChangeNotifier{
 
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+  int _rewardedPoint = 0 ;
 
+  int getrewardpoint() => _rewardedPoint;
 
-class AdsBloc {
 
   InterstitialAd _interstitialAd;
   RewardedAd _rewardedAd;
 
   int num_of_attempt_load = 0;
+  int _numRewardedLoadAttempts = 0;
 
   static initialization(){
     if(MobileAds.instance == null)
@@ -20,46 +23,69 @@ class AdsBloc {
     }
   }
 
-  void createRewardAd() {
+  void createRewardedAd() {
     RewardedAd.load(
-        adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+        adUnitId: Config().admobRewardAdId,
         request: AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
             print('$ad loaded.');
-            // Keep a reference to the ad so you can show it later.
-            this._rewardedAd = ad;
+            _rewardedAd = ad;
+            _numRewardedLoadAttempts = 0;
           },
           onAdFailedToLoad: (LoadAdError error) {
             print('RewardedAd failed to load: $error');
+            _rewardedAd = null;
+            _numRewardedLoadAttempts += 1;
+            if (_numRewardedLoadAttempts <= 2) {
+              createRewardedAd();
+            }
           },
         ));
   }
 
-  void showRewardAd() {
-    _rewardedAd.show(
-        onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
-          print("Adds Reward is ${rewardItem.amount}");
-
-        });
+  void showRewardedAd(Future<dynamic> onEnd) {
+    if (_rewardedAd == null) {
+      print('Warning: attempt to show rewarded before loaded.');
+      return;
+    }
     _rewardedAd.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (RewardedAd ad) =>
-          print('$ad onAdShowedFullScreenContent.'),
+          print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (RewardedAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
+        print('$ad onAdDismissedFullScreenContent.User dismissed');
         ad.dispose();
+        createRewardedAd();
+      },
+      onAdWillDismissFullScreenContent: (ad) {
+        print("pleasee dont");
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
+        createRewardedAd();
       },
       onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
     );
+    _rewardedAd.setImmersiveMode(true);
+    _rewardedAd.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+      int preReward = _rewardedPoint;
+      _rewardedPoint += reward.amount;
+      if(preReward<_rewardedPoint){
+        onEnd;
+      }else{
+        print("ad parra mayiru");
+      }
+
+
+      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
+    });
+    _rewardedAd = null;
   }
+
 
   // create interstitial ads
   void createInterad(){
-
     InterstitialAd.load(
       adUnitId: Config().admobInterstitialAdId,
       request: AdRequest(),
@@ -69,7 +95,7 @@ class AdsBloc {
             num_of_attempt_load =0;
           },
           onAdFailedToLoad: (LoadAdError error){
-            num_of_attempt_load +1;
+            num_of_attempt_load += 1;
             _interstitialAd = null;
 
             if(num_of_attempt_load<=2){

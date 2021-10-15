@@ -144,7 +144,7 @@ class _DetailsPageState extends State<DetailsPage> {
         downloading = false;
         progress = progress;
       });
-
+      admobHelper.createInterad();
       openCompleteDialog();
     }, onError: (error) {
       setState(() {
@@ -203,7 +203,7 @@ class _DetailsPageState extends State<DetailsPage> {
         downloading = false;
         progress = progress;
       });
-
+      admobHelper.createInterad();
       openCompleteDialog();
     }, onError: (error) {
       setState(() {
@@ -247,6 +247,7 @@ class _DetailsPageState extends State<DetailsPage> {
               )),
         ),
         btnOkText: 'Ok',
+
         dismissOnTouchOutside: false,
         btnOkOnPress: () {
           admobHelper.showInterad();
@@ -292,13 +293,14 @@ class _DetailsPageState extends State<DetailsPage> {
       setState(() {
         downloading = true;
         progress = 'Sharing your wallpaper is in\nProgress...';
+
       });
       final response = await get(imageUrl);
       final bytes = response.bodyBytes;
       final Directory temp = await getTemporaryDirectory();
       final File imageFile = File('${temp.path}/$timestamp'+'.jpg');
       imageFile.writeAsBytesSync(bytes);
-      Share.shareFiles(['${temp.path}/$timestamp'+'.jpg'], text: 'Wallpaper found on ReSplash\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/resplash',);
+      Share.shareFiles(['${temp.path}/$timestamp'+'.jpg'], text: 'Wallpaper found on ${Config().appName}\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/reflix',);
       await Future.delayed(Duration(seconds: 2));
       setState(() {
         downloading = false;
@@ -338,7 +340,7 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    admobHelper .createRewardAd();
+    admobHelper.createRewardedAd();
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
@@ -536,9 +538,9 @@ class _DetailsPageState extends State<DetailsPage> {
                           color: Colors.white,
                         ),
                       ),
-                      onTap: () {
-                        handleStoragePermission();
-                        admobHelper.showRewardAd();
+                      onTap: ()   {
+
+                        admobHelper.showRewardedAd(handleStoragePermission());
                       },
                     ),
                     SizedBox(
@@ -578,6 +580,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
                       onTap: () {
+
                         shareImage();
                       },
                     ),
@@ -645,16 +648,20 @@ class _DetailsPageState extends State<DetailsPage> {
           color: Theme.of(context).shadowColor,
           child: Hero(
             tag: tag,
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover)),
+            child: InteractiveViewer(
+              minScale: 0.1,
+              maxScale: 1.6,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                ),
+                placeholder: (context, url) => Icon(Icons.image),
+                errorWidget: (context, url, error) =>
+                    Center(child: Icon(Icons.error)),
               ),
-              placeholder: (context, url) => Icon(Icons.image),
-              errorWidget: (context, url, error) =>
-                  Center(child: Icon(Icons.error)),
             ),
           ),
         ),

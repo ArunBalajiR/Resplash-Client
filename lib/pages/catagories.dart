@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../blocs/data_bloc.dart';
@@ -42,24 +43,25 @@ class _CatagoryPageState extends State<CatagoryPage> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
                   child: Container(
-                    height: 140,
-                    width: w,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).shadowColor,
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                db.categories[index]['thumbnail'],
-                            ),
-                            fit: BoxFit.cover)),
-                    child: Align(
-                      child: Text(db.categories[index]['name'],
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600)),
+                      height: 140,
+                      width: w,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).shadowColor,
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                  db.categories[index]['thumbnail'],
+                              ),
+                              fit: BoxFit.cover)),
+                      child: Align(
+                        child: Text(db.categories[index]['name'],
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600)),
+                      ),
                     ),
-                  ),
+
                   onTap: () {
                     Navigator.push(
                         context,

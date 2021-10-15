@@ -139,13 +139,15 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                   ),
+              
                 )
               : TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
+
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Text(
                       ' Skip',
                       style: GoogleFonts.rubik(

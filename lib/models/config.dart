@@ -16,11 +16,11 @@ class Config {
   final String onesignalAppId = 'a2cf6396-d519-42bd-9b0a-d5b36506e516';
   
   //-- admob ads -- (these are test ids - you can use these admob ids for testing purposes)
-  final String admobAppId = 'ca-app-pub-3940256099942544~3347511713';
-  final String admobInterstitialAdId = 'ca-app-pub-3940256099942544/1033173712';
+  final String admobAppId = 'ca-app-pub-5314766096679860~3725231900';
+  final String admobInterstitialAdId = 'ca-app-pub-5314766096679860/1401981584';
+  final String admobRewardAdId = 'ca-app-pub-5314766096679860/7855601494';
 
 
-  //-- facebook ads--
-  final String facebookInterstitialAdId = '587840845185406***********';
+
 
 }

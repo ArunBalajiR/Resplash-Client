@@ -50,7 +50,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   _requestWallpaper() async {
     final Uri params = Uri(
       scheme: 'https',
-      path: 'telegram.me/request_reflix_walls',
+      path: 'instagram.com/_u/reflix_walls/',
     );
 
     var url = params.toString();
@@ -60,10 +60,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       throw 'Could not launch $url';
     }
   }
-
-
-
-
 
   Future openLogoutDialog(context1) async{
     showDialog(
@@ -252,8 +248,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     Divider(color: Colors.grey.withOpacity(0.5),),
                     DrawerTile(
-                      icons: FontAwesomeIcons.telegramPlane,
-                      title: "Request your \nWallpaper",
+                      icons: FontAwesomeIcons.instagram,
+                      title: "Follow us on \nInstagram",
                       onTaps: (){
                         _requestWallpaper();
                       },

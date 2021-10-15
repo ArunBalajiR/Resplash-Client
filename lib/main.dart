@@ -15,12 +15,21 @@ import './blocs/sign_in_bloc.dart';
 import './blocs/userdata_bloc.dart';
 import './pages/home.dart';
 
+List<String> testDeviceIds = ['D4D86FDE7CB34417834875CD469C2567'];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: true);
   AdsBloc.initialization();
+  //----
+
+  RequestConfiguration configuration =
+  RequestConfiguration(testDeviceIds: testDeviceIds);
+  MobileAds.instance.updateRequestConfiguration(configuration);
+  //---
+
+
   runApp(MyApp());
 }
 
