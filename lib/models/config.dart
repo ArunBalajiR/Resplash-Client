@@ -11,7 +11,7 @@ class Config {
   final String appIcon = 'assets/images/icon.png';
   final String splashIcon = 'assets/images/splash.png';
   final String guestUserImage = 'http://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png';
-
+  final String homePageText = "Wall of the day";
   // -- Onesignal Push Notification
   final String onesignalAppId = 'a2cf6396-d519-42bd-9b0a-d5b36506e516';
   

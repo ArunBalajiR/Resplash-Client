@@ -1,21 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:resplash/models/config.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
 
-class AdsBloc extends ChangeNotifier{
-
-  int _rewardedPoint = 0 ;
-  int _preReward = -1;
-
-  int getrewardpoint() => _rewardedPoint;
-  int getpreRewardpoint() => _preReward;
+class AdsBloc {
 
 
   InterstitialAd _interstitialAd;
   RewardedAd _rewardedAd;
 
-  int num_of_attempt_load = 0;
+  int numOfAttemptLoad = 0;
   int _numRewardedLoadAttempts = 0;
 
   static initialization(){
@@ -52,8 +44,7 @@ class AdsBloc extends ChangeNotifier{
       return;
     }
     _rewardedAd.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (RewardedAd ad) {},
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.User dismissed');
         ad.dispose();
@@ -64,15 +55,17 @@ class AdsBloc extends ChangeNotifier{
         ad.dispose();
         createRewardedAd();
       },
-      onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
+      onAdImpression: (RewardedAd ad){},
     );
     _rewardedAd.setImmersiveMode(true);
     _rewardedAd.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+        // ignore: unnecessary_statements
         onEnd;
         print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
     });
     _rewardedAd = null;
   }
+
 
 
   // create interstitial ads
@@ -83,13 +76,13 @@ class AdsBloc extends ChangeNotifier{
       adLoadCallback:InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad){
             _interstitialAd = ad;
-            num_of_attempt_load =0;
+            numOfAttemptLoad =0;
           },
           onAdFailedToLoad: (LoadAdError error){
-            num_of_attempt_load += 1;
+            numOfAttemptLoad += 1;
             _interstitialAd = null;
 
-            if(num_of_attempt_load<=2){
+            if(numOfAttemptLoad<=2){
               createInterad();
             }
           }),
@@ -123,6 +116,7 @@ class AdsBloc extends ChangeNotifier{
 
     _interstitialAd = null;
   }
+
 
 
 }

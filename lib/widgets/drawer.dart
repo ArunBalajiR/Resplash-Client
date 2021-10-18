@@ -10,10 +10,6 @@ import 'package:resplash/pages/about_page.dart';
 import 'package:resplash/pages/signin_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/config.dart';
-import '../pages/bookmark.dart';
-import '../pages/catagories.dart';
-import '../pages/explore.dart';
-
 import '../utils/next_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';

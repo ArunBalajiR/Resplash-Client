@@ -30,6 +30,8 @@ class Styles {
           colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light(),
       ),
 
+      accentColorBrightness: isDarkTheme ? Brightness.light : Brightness.dark,
+
       appBarTheme: isDarkTheme ? AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         brightness: Brightness.dark,

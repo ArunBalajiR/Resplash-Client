@@ -24,6 +24,23 @@ class About extends StatelessWidget {
 
 
 
+  _openMEG() async {
+    final Uri params = Uri(
+      scheme: 'https',
+      path: 'www.facebook.com/groups/2930571320593766/',
+    );
+
+    var url = params.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +121,14 @@ class About extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10,),
+                  Text("I believe all images used falls under the remits of Fair Use. It is not my intent to in anyway infringe on their content ownership. ",style: TextStyle(color: Colors.blueGrey),),
+                  SizedBox(height: 10,),
+                  ListTile(
+                    title: Text("Mollywood Editors Gallery(MEG)",style: TextStyle(color: Colors.blueGrey),),
+                    leading: Icon(Icons.facebook,color: Colors.blueGrey,),
+                    onTap: _openMEG,
+                  ),
+
                   Text(
                     "All the Images shown in this app belongs to their respective owners, this app is just a showcase for users to set wallpapers."
                         "Ads are placed to support myself.Wallpapers listed in this app are either from the public domain or Under creative common license or"

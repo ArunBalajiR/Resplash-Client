@@ -1,10 +1,7 @@
 import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:resplash/models/categoryModel.dart';
 import 'package:resplash/models/config.dart';
-import 'package:resplash/pages/catagory_items.dart';
 import 'package:resplash/pages/searchingpage.dart';
 import 'package:resplash/widgets/cached_image.dart';
 import 'package:resplash/widgets/categorytile.dart';
@@ -107,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
 
                 background: CustomPaint(
                   foregroundPainter: FadingEffect(),
-                  child: cachedSearchImage("https://firebasestorage.googleapis.com/v0/b/admin-panel-b8640.appspot.com/o/Others%2Fsearchcover.jpg?alt=media&token=fff8c5ed-8f1a-47ea-b98c-9c8d9988e8c4",),
+                  child: cachedSearchImage("https://firebasestorage.googleapis.com/v0/b/admin-panel-b8640.appspot.com/o/Others%2Fsearchcover.jpg?alt=media&token=bd87c28b-ef2e-4597-895e-570e0ef2c775",),
                 ),
             ),
             pinned: true,

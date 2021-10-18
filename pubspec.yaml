@@ -17,7 +17,7 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.6
   intl: ^0.16.1
   flutter_downloader: ^1.7.0
-  cloud_firestore: ^0.14.3
+  cloud_firestore: ^0.14.4
   google_mobile_ads: ^0.13.5
   font_awesome_flutter: ^8.5.0
   dots_indicator: ^1.1.0
@@ -42,8 +42,9 @@ dependencies:
   firebase_core: ^0.5.2
   rounded_loading_button: ^1.0.15
   share: ^2.0.4
-#  firebase_admob: ^0.10.2
-  # facebook_audience_network: ^0.9.0
+  quiver: ^2.1.5
+  rxdart: ^0.25.0
+
 
 dev_dependencies:
   flutter_test:

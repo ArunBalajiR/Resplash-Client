@@ -76,8 +76,6 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -103,7 +101,8 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
           snapshot.data == "error" || snapshot.data.length ==0 ?
             snapshot.data == "error" ? NoInternetPage() :EmptyPage(title: "No wallpapers found", subTitle: "Try with different keywords",icon: FontAwesomeIcons.heart)
             : StaggeredGridView.countBuilder(
-                itemCount: snapshot.data.length+1,
+                physics: BouncingScrollPhysics(),
+                itemCount: snapshot.data.length,
                 crossAxisCount: 4,
                 staggeredTileBuilder: (int index) => StaggeredTile.count(2, index.isEven ? 4 : 3),
                 mainAxisSpacing: 10,

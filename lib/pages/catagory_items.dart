@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import '../models/config.dart';
 import '../pages/details.dart';
 import '../widgets/cached_image.dart';
-import 'package:flutter/services.dart';
+
 
 class CatagoryItem extends StatefulWidget {
   final String title;
@@ -123,8 +122,10 @@ class _CatagoryItemState extends State<CatagoryItem> {
       ),
       body: Column(
         children: [
+
           Expanded(
             child: StaggeredGridView.countBuilder(
+              physics: BouncingScrollPhysics(),
               crossAxisCount: 4,
               controller: controller,
               itemCount: _data.length + 1,

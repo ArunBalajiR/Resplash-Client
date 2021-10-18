@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:resplash/models/config.dart';
 import 'package:resplash/pages/details.dart';
 import 'package:resplash/widgets/cached_image.dart';
 
@@ -98,9 +97,11 @@ class _PopularItemsState extends State<PopularItems> with AutomaticKeepAliveClie
       children: [
         Expanded(
           child: StaggeredGridView.countBuilder(
+            physics: BouncingScrollPhysics(),
             controller: controller,
             crossAxisCount: 4,
             itemCount: _data.length + 1,
+
             itemBuilder: (BuildContext context, int index){ 
             
             if(index < _data.length){

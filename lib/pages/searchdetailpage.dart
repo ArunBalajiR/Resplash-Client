@@ -18,7 +18,6 @@ import 'package:resplash/blocs/sign_in_bloc.dart';
 import '../blocs/data_bloc.dart';
 import '../blocs/internet_bloc.dart';
 import '../models/config.dart';
-import '../models/icon_data.dart';
 import '../utils/circular_button.dart';
 
 class SearchDetailsPage extends StatefulWidget {
@@ -68,6 +67,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text('SET AS'),
           contentPadding:
           EdgeInsets.only(left: 30, top: 40, bottom: 20, right: 40),
@@ -240,6 +240,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         ),
         btnOkText: 'Ok',
         dismissOnTouchOutside: false,
+        dismissOnBackKeyPress: false,
         btnOkOnPress: () {
           admobHelper.showInterad();
         }).show();
@@ -333,6 +334,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
   @override
   void dispose() {
+
     super.dispose();
   }
 

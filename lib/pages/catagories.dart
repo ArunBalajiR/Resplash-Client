@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../blocs/data_bloc.dart';
 import '../pages/catagory_items.dart';
-import 'package:flutter/services.dart';
 class CatagoryPage extends StatefulWidget {
   CatagoryPage({Key key}) : super(key: key);
 

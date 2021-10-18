@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
 import 'package:resplash/models/dark_theme_provider.dart';
@@ -18,23 +16,16 @@ import './pages/home.dart';
 
 List<String> testDeviceIds = ['D4D86FDE7CB34417834875CD469C2567'];
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: true);
   AdsBloc.initialization();
-
-
-
   //----
-
-
-  RequestConfiguration configuration =
-  RequestConfiguration(testDeviceIds: testDeviceIds);
+  RequestConfiguration configuration = RequestConfiguration(testDeviceIds: testDeviceIds);
   MobileAds.instance.updateRequestConfiguration(configuration);
   //---
-
-
   runApp(MyApp());
 }
 

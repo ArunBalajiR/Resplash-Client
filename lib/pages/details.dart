@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fzwallpaper/fzwallpaper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,9 +24,6 @@ import '../models/config.dart';
 import 'package:http/http.dart';
 import '../models/icon_data.dart';
 import '../utils/circular_button.dart';
-
-ReceivePort _port = ReceivePort();
-
 
 class DetailsPage extends StatefulWidget {
   final String tag;
@@ -217,11 +213,7 @@ class _DetailsPageState extends State<DetailsPage> {
   handleStoragePermission() async {
     await Permission.storage.request().then((_) async {
       if (await Permission.storage.status == PermissionStatus.granted) {
-        // if(admobHelper.getpreRewardpoint() > admobHelper.getrewardpoint()){
           await handleDownload();
-        // }else
-        //   print("ad paara");
-
 
       } else if (await Permission.storage.status == PermissionStatus.denied) {
       } else if (await Permission.storage.status == PermissionStatus.permanentlyDenied) {
@@ -252,11 +244,12 @@ class _DetailsPageState extends State<DetailsPage> {
               )),
         ),
         btnOkText: 'Ok',
-
         dismissOnTouchOutside: false,
+        dismissOnBackKeyPress: false,
         btnOkOnPress: () {
           admobHelper.showInterad();
         }).show();
+
   }
 
   askOpenSettingsDialog() {
@@ -342,11 +335,13 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
+
+
   @override
   void initState() {
-
     admobHelper.createRewardedAd();
     FlutterDownloader.registerCallback(downloadCallback);
+    super.initState();
   }
 
   @override

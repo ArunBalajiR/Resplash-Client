@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BookmarkBloc extends ChangeNotifier {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<List> getData() async {
+   getData() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String _uid = sp.getString('uid');
 

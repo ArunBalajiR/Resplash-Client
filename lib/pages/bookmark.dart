@@ -1,25 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resplash/blocs/sign_in_bloc.dart';
-import 'package:resplash/models/config.dart';
 import 'package:resplash/pages/details.dart';
 import 'package:resplash/pages/empty_page.dart';
 import 'package:resplash/widgets/cached_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../blocs/bookmark_bloc.dart';
+
 
 class BookmarkPage extends StatelessWidget {
   const BookmarkPage({Key key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
     final sb = context.watch<SignInBloc>();
-
-
-
     return RefreshIndicator(
       onRefresh: () async {
         await context.read<BookmarkBloc>().getData();
@@ -36,8 +36,8 @@ class BookmarkPage extends StatelessWidget {
                 icon: FontAwesomeIcons.heart,
                 title: 'No wallpapers found.\n Sign in to access this feature',
               )
-            : FutureBuilder(
-                future: context.watch<BookmarkBloc>().getData(),
+            : StreamBuilder(
+                stream: context.watch<BookmarkBloc>().getData(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data.length == 0)
@@ -127,3 +127,7 @@ class BookmarkPage extends StatelessWidget {
     );
   }
 }
+
+
+
+

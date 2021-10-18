@@ -66,7 +66,8 @@ class _HomePageState extends State<HomePage> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Theme.of(context).primaryColor,
       statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Theme.of(context).accentColorBrightness,
+
     ));
 
     return Material(
@@ -214,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                                                               Material(
                                                                 type : MaterialType.transparency,
                                                                 child: Text(
-                                                                'Wall Of the Day',
+                                                                Config().homePageText,
 
                                                                 style: GoogleFonts.greatVibes(
 
