@@ -25,6 +25,7 @@ class DataBloc extends ChangeNotifier {
     x.take(5).forEach((f) {
       _alldata.add(f);
     });
+
     notifyListeners();
   }
 

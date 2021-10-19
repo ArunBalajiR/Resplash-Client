@@ -14,13 +14,19 @@ class BookmarkBloc extends ChangeNotifier {
     List d = snap['loved items'];
     List filteredData = [];
     if (d.isNotEmpty) {
-      await firestore
-          .collection('contents')
-          .where('timestamp', whereIn: d)
-          .get()
-          .then((QuerySnapshot snap) {
-        filteredData = snap.docs;
-      });
+      try {
+        await firestore
+            .collection('contents')
+            .where('timestamp', whereIn: d).limit(10)
+            .get()
+            .then((QuerySnapshot snap) {
+          filteredData = snap.docs;
+        });
+      }catch(e){
+        ref.update({
+          'loved items':FieldValue.arrayRemove(d)
+        });
+      }
     }
 
     notifyListeners();

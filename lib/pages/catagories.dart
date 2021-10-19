@@ -33,6 +33,7 @@ class _CatagoryPageState extends State<CatagoryPage> {
             )),
       ),
       body: ListView.separated(
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(15),
         itemCount: db.categories.length,
         separatorBuilder: (BuildContext context, int index) {
