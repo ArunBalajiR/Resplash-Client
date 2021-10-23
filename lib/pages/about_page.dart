@@ -105,7 +105,7 @@ class About extends StatelessWidget {
                   SizedBox(height: 10,),
                   Text(
                     "${Config().appName} is being created to provide a new experience in wallpaper application. ${Config().appName} follows a modern, "
-                        "easy to use UI but never compromises on the quality of wallpapers. ReSplash provides you with 2D Retouched Wallpapers as well as UHD/4K images from Pexels.com. "
+                        "easy to use UI but never compromises on the quality of wallpapers. ${Config().appName} provides you with 2D Retouched Wallpapers as well as UHD/4K images from Pexels.com. "
                         "Thanks for downloading the app. Do rate and review. Feel free to send your feedback.",
                     style: TextStyle(color: Colors.blueGrey),
                         
@@ -121,7 +121,7 @@ class About extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Text("I believe all images used falls under the remits of Fair Use. It is not my intent to in anyway infringe on their content ownership. ",style: TextStyle(color: Colors.blueGrey),),
+                  Text("I believe all images used falls under the remits of Fair Use. It is not my intent to in anyway infringe on their content ownership.Thank you, MEG Facebook group for inspiring me to create this app.",style: TextStyle(color: Colors.blueGrey),),
                   SizedBox(height: 10,),
                   ListTile(
                     title: Text("Mollywood Editors Gallery(MEG)",style: TextStyle(color: Colors.blueGrey),),
