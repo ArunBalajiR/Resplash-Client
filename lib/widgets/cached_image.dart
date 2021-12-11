@@ -6,6 +6,8 @@ import '../widgets/loading_animation.dart';
   Widget cachedImage(imageUrl) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
+      fadeInDuration: Duration(milliseconds: 500),
+      fadeOutDuration: Duration(milliseconds: 1000),
       imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
               color: Theme.of(context).shadowColor,
@@ -28,6 +30,8 @@ import '../widgets/loading_animation.dart';
 Widget cachedSearchImage(imageUrl) {
   return CachedNetworkImage(
     imageUrl: imageUrl,
+    fadeInDuration: Duration(milliseconds: 500),
+    fadeOutDuration: Duration(milliseconds: 1000),
     imageBuilder: (context, imageProvider) => Container(
       decoration: BoxDecoration(
           color: Theme.of(context).shadowColor,
@@ -42,6 +46,8 @@ Widget cachedSearchImage(imageUrl) {
 
 Widget cachedTileImage(imageUrl) {
   return CachedNetworkImage(
+    fadeInDuration: Duration(milliseconds: 500),
+    fadeOutDuration: Duration(milliseconds: 1000),
     imageUrl: imageUrl,
     width: 200,
     height: 200,

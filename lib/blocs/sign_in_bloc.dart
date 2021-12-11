@@ -15,7 +15,7 @@ class SignInBloc extends ChangeNotifier {
   }
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googlSignIn = new GoogleSignIn();
+  final GoogleSignIn _googlSignIn = GoogleSignIn();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   bool _guestUser = false;
@@ -27,31 +27,26 @@ class SignInBloc extends ChangeNotifier {
   bool _hasError = false;
   bool get hasError => _hasError;
 
-  String _errorCode;
-  String get errorCode => _errorCode;
+  String? _errorCode;
+  String? get errorCode => _errorCode;
 
-  String _name;
-  String get name => _name;
+  String? _name;
+  String? get name => _name;
 
-  String _uid;
-  String get uid => _uid;
+  String? _uid;
+  String? get uid => _uid;
 
-  String _email;
-  String get email => _email;
+  String? _email;
+  String? get email => _email;
 
-  String _imageUrl;
-  String get imageUrl => _imageUrl;
+  String? _imageUrl;
+  String? get imageUrl => _imageUrl;
 
-  String timestamp;
+  String? timestamp;
 
-
-
-
-  
 
   Future signInWithGoogle() async {
-    // ignore: invalid_return_type_for_catch_error
-    final GoogleSignInAccount googleUser = await _googlSignIn.signIn().catchError((error) => print('error : $error'));
+    final GoogleSignInAccount? googleUser = await _googlSignIn.signIn();
     if (googleUser != null) {
       try {
         final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -61,7 +56,7 @@ class SignInBloc extends ChangeNotifier {
           idToken: googleAuth.idToken,
         );
 
-        final User userDetails = (await _firebaseAuth.signInWithCredential(credential)).user;
+        final User userDetails = (await _firebaseAuth.signInWithCredential(credential)).user!;
 
         this._name = userDetails.displayName;
         this._email = userDetails.email;
@@ -72,7 +67,7 @@ class SignInBloc extends ChangeNotifier {
         notifyListeners();
       } catch (e) {
         _hasError = true;
-        _errorCode = e.code;
+        _errorCode = e.toString();
         notifyListeners();
       }
     } else {
@@ -116,10 +111,10 @@ class SignInBloc extends ChangeNotifier {
   Future saveDataToSP() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    await sharedPreferences.setString('name', _name);
-    await sharedPreferences.setString('email', _email);
-    await sharedPreferences.setString('image url', _imageUrl);
-    await sharedPreferences.setString('uid', _uid);
+    await sharedPreferences.setString('name', _name!);
+    await sharedPreferences.setString('email', _email!);
+    await sharedPreferences.setString('image url', _imageUrl!);
+    await sharedPreferences.setString('uid', _uid!);
   }
 
   Future getUserDatafromSP() async {

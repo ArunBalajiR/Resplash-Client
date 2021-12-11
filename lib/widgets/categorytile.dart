@@ -4,8 +4,8 @@ import 'cached_image.dart';
 
 class CategoryTile extends StatelessWidget {
 
-  final String imageURL,categoryName;
-  final Function redirectTo;
+  final String? imageURL,categoryName;
+  final VoidCallback? redirectTo;
   CategoryTile({this.imageURL,this.categoryName,this.redirectTo});
 
   @override
@@ -32,7 +32,7 @@ class CategoryTile extends StatelessWidget {
                 ),
 
                 child: Text(
-                  categoryName,
+                  categoryName!,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),)
             ),

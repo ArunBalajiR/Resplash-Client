@@ -59,12 +59,18 @@ showUserInfo(context, name, email, imageUrl) {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    'You have alredy signed in with\n$email',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
+                  FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        'You have alredy signed in with\n$email',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                    ),
                   ),
                   Spacer(),
                   InkWell(
@@ -77,10 +83,13 @@ showUserInfo(context, name, email, imageUrl) {
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width,
 
-                      child: Text(
-                        'Ok, Got It',
-                        style: TextStyle(
-                          color: Colors.white,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: Text(
+                          'Ok, Got It',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -140,7 +149,7 @@ showGuestUserInfo(context) {
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7)),
+                          color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7)),
                     ),
                   ),
                   Spacer(),
@@ -186,7 +195,7 @@ showGuestUserInfo(context) {
                             child: Text(
                               'Maybe Later',
                               style: TextStyle(
-                                color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                                color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                               ),
                             ),
                           ),

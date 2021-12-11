@@ -22,7 +22,7 @@ class _SearchPageState extends State<SearchPage> {
 
 
   List<CategorieModel> categories = [];
-  ScrollController controller;
+  ScrollController? controller;
 
 
 
@@ -43,8 +43,8 @@ class _SearchPageState extends State<SearchPage> {
     categories = getCategories();
     controller = ScrollController();
 
-    controller.addListener(() {
-      if (controller.offset > 120 && !controller.position.outOfRange) {
+    controller!.addListener(() {
+      if (controller!.offset > 120 && !controller!.position.outOfRange) {
         if(!silverCollapsed){
           setState(() {
 
@@ -61,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
           });
         }
       }
-      if (controller.offset <= 100 && !controller.position.outOfRange) {
+      if (controller!.offset <= 100 && !controller!.position.outOfRange) {
         if(silverCollapsed){
           setState(() {
             initTitle =  Text(
@@ -92,6 +92,8 @@ class _SearchPageState extends State<SearchPage> {
           SliverAppBar(
 
             elevation: 0,
+            backgroundColor: Theme.of(context).primaryColor,
+
             // automaticallyImplyLeading : false,
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
@@ -104,13 +106,14 @@ class _SearchPageState extends State<SearchPage> {
 
                 background: CustomPaint(
                   foregroundPainter: FadingEffect(),
-                  child: cachedSearchImage("https://firebasestorage.googleapis.com/v0/b/admin-panel-b8640.appspot.com/o/Others%2Fsearchcover.jpg?alt=media&token=bd87c28b-ef2e-4597-895e-570e0ef2c775",),
+                  child: cachedSearchImage("https://live.staticflickr.com/65535/51687993476_60311c9e9b_z.jpg",),
                 ),
             ),
             pinned: true,
             expandedHeight: width/1.2,
             centerTitle: true,
             bottom: AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25.0),
@@ -276,13 +279,13 @@ class _SearchPageState extends State<SearchPage> {
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                       return CategoryTile(
-                        imageURL: categories[index].imgUrl,
-                        categoryName: categories[index].categorieName,
+                        imageURL: categories[index].imgUrl!,
+                        categoryName: categories[index].categorieName!,
                         redirectTo: (){
                         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
                           return  ib.hasInternet == false
                               ? NoInternetPage()
-                              : SearchItem(searchKeyword: categories[index].categorieName);
+                              : SearchItem(searchKeyword: categories[index].categorieName!);
                         }));
                       },
                       );
@@ -302,12 +305,12 @@ class _SearchPageState extends State<SearchPage> {
 class ColorWidget extends StatelessWidget {
   final Color colorName;
   final url;
-  final Function onPress;
+  final VoidCallback onPress;
   const ColorWidget({
-    Key key,
-    this.colorName,
+    Key? key,
+    required this.colorName,
     this.url,
-    this.onPress,
+    required this.onPress,
   }) : super(key: key);
 
   @override
@@ -324,14 +327,14 @@ class ColorWidget extends StatelessWidget {
 }
 
 class _Search extends StatefulWidget {
-  _Search({Key key}) : super(key: key);
+  _Search({Key? key}) : super(key: key);
 
   @override
   __SearchState createState() => __SearchState();
 }
 
 class __SearchState extends State<_Search> {
-  TextEditingController _editingController;
+  TextEditingController? _editingController;
 
   @override
   void initState() {
@@ -361,7 +364,7 @@ class __SearchState extends State<_Search> {
               ),
             ),
           ),
-          _editingController.text.trim().isEmpty
+          _editingController!.text.trim().isEmpty
               ? IconButton(
                   icon: Icon(Icons.search,
                       color: Theme.of(context).primaryColor.withOpacity(0.5)),
@@ -373,7 +376,7 @@ class __SearchState extends State<_Search> {
                       color: Theme.of(context).primaryColor.withOpacity(0.5)),
                   onPressed: () => setState(
                     () {
-                      _editingController.clear();
+                      _editingController!.clear();
                     },
                   ),
                 ),

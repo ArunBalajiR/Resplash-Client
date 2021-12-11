@@ -1,8 +1,8 @@
 import 'package:resplash/models/config.dart';
 
 class CategorieModel {
-  String categorieName;
-  String imgUrl;
+  String? categorieName;
+  String? imgUrl;
 }
 
 String apiKEY = Config().pexelsKey;

@@ -7,7 +7,7 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
-        <!-- If your app emails -->s
+        <!-- If your app emails -->
         <intent>
             <action android:name="android.intent.action.SEND" />
             <data android:mimeType="*/*" />
@@ -20,11 +20,12 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-   <application
+
+    <application
         android:label="ReFlix"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
-
+        android:requestLegacyExternalStorage="true"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <activity
             android:name=".MainActivity"
@@ -63,22 +64,13 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-       <provider
-           android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-           android:authorities="${applicationId}.flutter_downloader.provider"
-           android:exported="false"
-           android:grantUriPermissions="true">
-           <meta-data
-               android:name="android.support.FILE_PROVIDER_PATHS"
-               android:resource="@xml/provider_paths"/>
-       </provider>
 
        <!-- Replace by your admob app id -->
 
        <meta-data
            android:name="com.google.android.gms.ads.APPLICATION_ID"
 
-           android:value="ca-app-pub-5314766096679860~3725231900"/>
+           android:value="ca-app-pub-4871513777971533~3189028320"/>
 
     </application>
 </manifest>

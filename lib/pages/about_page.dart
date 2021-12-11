@@ -4,7 +4,7 @@ import 'package:resplash/models/config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
-  final BuildContext navContext;
+  final BuildContext? navContext;
   About({this.navContext});
 
 
@@ -23,32 +23,13 @@ class About extends StatelessWidget {
   }
 
 
-
-  _openMEG() async {
-    final Uri params = Uri(
-      scheme: 'https',
-      path: 'www.facebook.com/groups/2930571320593766/',
-    );
-
-    var url = params.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
 
     aboutAppDialog() {
       showDialog(
           context: context,
-          builder: (BuildContext coontext) {
+          builder: (BuildContext context) {
 
             return AboutDialog(
 
@@ -116,18 +97,13 @@ class About extends StatelessWidget {
                     "Credits",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                      color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                       fontSize: 25,
                     ),
                   ),
                   SizedBox(height: 10,),
                   Text("I believe all images used falls under the remits of Fair Use. It is not my intent to in anyway infringe on their content ownership.Thank you, MEG Facebook group for inspiring me to create this app.",style: TextStyle(color: Colors.blueGrey),),
                   SizedBox(height: 10,),
-                  ListTile(
-                    title: Text("Mollywood Editors Gallery(MEG)",style: TextStyle(color: Colors.blueGrey),),
-                    leading: Icon(Icons.facebook,color: Colors.blueGrey,),
-                    onTap: _openMEG,
-                  ),
 
                   Text(
                     "All the Images shown in this app belongs to their respective owners, this app is just a showcase for users to set wallpapers."
@@ -153,7 +129,7 @@ class About extends StatelessWidget {
                             "Privacy Policy",
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                              color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                               fontSize: 20,
                             ),
                           ),
@@ -178,7 +154,7 @@ class About extends StatelessWidget {
                             "Licenses and more",
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                              color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                               fontSize: 20,
                             ),
                           ),

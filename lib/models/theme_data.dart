@@ -13,10 +13,12 @@ class Styles {
       scaffoldBackgroundColor: isDarkTheme ? Colors.black :Colors.grey.shade300,
       primaryColor: isDarkTheme ? Color(0xff010c1d) : Colors.white,
       primarySwatch: Colors.grey,
+      // ignore: deprecated_member_use
       accentColor: Colors.grey,
       highlightColor: isDarkTheme ? Colors.black45 : Colors.grey.shade300,
       backgroundColor: isDarkTheme ?  Color(0xff2a3344) : Color(0xfff3f3f4),
       indicatorColor: isDarkTheme ? Color(0xff0E1D36) : Color(0xffCBDCF8),
+      // ignore: deprecated_member_use
       buttonColor: isDarkTheme ? Color(0xff3B3B3B) : Color(0xffF1F5FB),
       hintColor: isDarkTheme ? Colors.white : Colors.black,
       bottomAppBarColor: isDarkTheme ? Color(0xff2a3344) : Colors.grey[200],
@@ -30,10 +32,13 @@ class Styles {
           colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light(),
       ),
 
+      // ignore: deprecated_member_use
       accentColorBrightness: isDarkTheme ? Brightness.light : Brightness.dark,
 
       appBarTheme: isDarkTheme ? AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: Color(0xff010c1d),
+        // ignore: deprecated_member_use
         brightness: Brightness.dark,
         elevation: 0,
         iconTheme: IconThemeData(
@@ -41,6 +46,8 @@ class Styles {
         ),
       ) : AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.white,
+        // ignore: deprecated_member_use
         brightness: Brightness.light,
         elevation: 0,
         iconTheme: IconThemeData(

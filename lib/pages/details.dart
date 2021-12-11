@@ -1,14 +1,18 @@
 // details page
-import 'dart:isolate';
+import 'dart:typed_data';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:resplash/widgets/heart_animation.dart';
 import 'dart:ui';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:fzwallpaper/fzwallpaper.dart';
+import 'package:wallpaper/wallpaper.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -26,47 +30,63 @@ import '../models/icon_data.dart';
 import '../utils/circular_button.dart';
 
 class DetailsPage extends StatefulWidget {
-  final String tag;
-  final String imageUrl;
-  final String catagory;
-  final String timestamp;
+  final String? tag;
+  final String? imageUrl;
+  final String? thumbUrl;
+  final String? catagory;
+  final String? timestamp;
 
   DetailsPage(
-      {Key key,
-      @required this.tag,
+      {Key? key,
+      required this.tag,
       this.imageUrl,
+      this.thumbUrl,
       this.catagory,
       this.timestamp})
       : super(key: key);
 
-
-
   @override
-  _DetailsPageState createState() =>
-      _DetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
+  _DetailsPageState createState() => _DetailsPageState(
+      this.tag, this.imageUrl, this.thumbUrl, this.catagory, this.timestamp);
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-
-
-  String tag;
-  String imageUrl;
-  String catagory;
-  String timestamp;
-  _DetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
-
+  String? tag;
+  String? imageUrl;
+  String? thumbUrl;
+  String? catagory;
+  String? timestamp;
+  _DetailsPageState(
+      this.tag, this.imageUrl, this.thumbUrl, this.catagory, this.timestamp);
 
   AdsBloc admobHelper = new AdsBloc();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String progress = 'Set as Wallpaper or Download';
   bool downloading = false;
-  Stream<String> progressString;
+  late Stream<String> progressString;
   Icon dropIcon = Icon(Icons.arrow_upward);
   Icon upIcon = Icon(Icons.arrow_upward);
   Icon downIcon = Icon(Icons.arrow_downward);
   PanelController pc = PanelController();
-  PermissionStatus status;
+  PermissionStatus? status;
+  final Dio dio = Dio();
+  bool isLoading = false;
+  bool isShareLoading = false;
+  double percent = 0;
+  bool isLiked = false;
+  bool isHeartAnimating = false;
+
+  Future initAdmobRewardAd() async{
+    await MobileAds.instance.initialize();
+    context.read<AdsBloc>().loadAdmobARewardad();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    initAdmobRewardAd();
+  }
 
   void openSetDialog() async {
     showDialog(
@@ -128,7 +148,7 @@ class _DetailsPageState extends State<DetailsPage> {
         ? setState(() {
             progress = 'iOS is not supported';
           })
-        : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
+        : progressString = Wallpaper.imageDownloadProgress(imageUrl!);
     progressString.listen((data) {
       setState(() {
         downloading = true;
@@ -136,13 +156,13 @@ class _DetailsPageState extends State<DetailsPage> {
       });
       print("DataReceived: " + data);
     }, onDone: () async {
-      progress = await Fzwallpaper.lockScreen();
+      progress = await Wallpaper.lockScreen();
       setState(() {
         downloading = false;
         progress = progress;
       });
-      admobHelper.createInterad();
-      openCompleteDialog();
+      // admobHelper.createInterad();
+      openCompleteDialog(false);
     }, onError: (error) {
       setState(() {
         downloading = false;
@@ -157,7 +177,7 @@ class _DetailsPageState extends State<DetailsPage> {
         ? setState(() {
             progress = 'iOS is not supported';
           })
-        : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
+        : progressString = Wallpaper.imageDownloadProgress(imageUrl!);
     progressString.listen((data) {
       setState(() {
         //res = data;
@@ -166,13 +186,13 @@ class _DetailsPageState extends State<DetailsPage> {
       });
       print("DataReceived: " + data);
     }, onDone: () async {
-      progress = await Fzwallpaper.homeScreen();
+      progress = await Wallpaper.homeScreen();
       setState(() {
         downloading = false;
         progress = progress;
       });
-      admobHelper.createInterad();
-      openCompleteDialog();
+      // admobHelper.createInterad();
+      openCompleteDialog(false);
     }, onError: (error) {
       setState(() {
         downloading = false;
@@ -187,7 +207,7 @@ class _DetailsPageState extends State<DetailsPage> {
         ? setState(() {
             progress = 'iOS is not supported';
           })
-        : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
+        : progressString = Wallpaper.imageDownloadProgress(imageUrl!);
     progressString.listen((data) {
       setState(() {
         downloading = true;
@@ -195,13 +215,13 @@ class _DetailsPageState extends State<DetailsPage> {
       });
       print("DataReceived: " + data);
     }, onDone: () async {
-      progress = await Fzwallpaper.bothScreen();
+      progress = await Wallpaper.bothScreen();
       setState(() {
         downloading = false;
         progress = progress;
       });
-      admobHelper.createInterad();
-      openCompleteDialog();
+      // admobHelper.createInterad();
+      openCompleteDialog(false);
     }, onError: (error) {
       setState(() {
         downloading = false;
@@ -213,33 +233,29 @@ class _DetailsPageState extends State<DetailsPage> {
   handleStoragePermission() async {
     await Permission.storage.request().then((_) async {
       if (await Permission.storage.status == PermissionStatus.granted) {
-          await handleDownload();
-
+        await handleDownload();
       } else if (await Permission.storage.status == PermissionStatus.denied) {
-      } else if (await Permission.storage.status == PermissionStatus.permanentlyDenied) {
-
+      } else if (await Permission.storage.status ==
+          PermissionStatus.permanentlyDenied) {
         askOpenSettingsDialog();
       }
     });
   }
 
-
-
-
-  void openCompleteDialog() async {
+  void openCompleteDialog(bool isDownload) async {
     AwesomeDialog(
         context: context,
         dialogType: DialogType.SUCCES,
         animType: AnimType.SCALE,
         padding: EdgeInsets.all(30),
-        title:  'Complete',
-        dialogBackgroundColor : Theme.of(context).primaryColor,
+        title: 'Complete',
+        dialogBackgroundColor: Theme.of(context).primaryColor,
         body: Center(
           child: Container(
               alignment: Alignment.center,
               height: 80,
               child: Text(
-                progress,
+                isDownload ? "Wallpaper Saved \nto Gallery" : progress,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               )),
         ),
@@ -247,9 +263,9 @@ class _DetailsPageState extends State<DetailsPage> {
         dismissOnTouchOutside: false,
         dismissOnBackKeyPress: false,
         btnOkOnPress: () {
-          admobHelper.showInterad();
+          isDownload ? null :
+          context.read<AdsBloc>().showInterstitialAdAdmob();
         }).show();
-
   }
 
   askOpenSettingsDialog() {
@@ -282,80 +298,58 @@ class _DetailsPageState extends State<DetailsPage> {
         });
   }
 
-
-
   void shareImage() async {
     final ib = context.read<InternetBloc>();
     await context.read<InternetBloc>().checkInternet();
-    if(ib.hasInternet == true) {
+    if (ib.hasInternet == true) {
       setState(() {
         downloading = true;
         progress = 'Sharing your wallpaper is in\nProgress...';
-
       });
-      final response = await get(imageUrl);
+      final response = await get(Uri.parse(imageUrl!));
       final bytes = response.bodyBytes;
       final Directory temp = await getTemporaryDirectory();
-      final File imageFile = File('${temp.path}/$timestamp'+'.jpg');
+      final File imageFile = File('${temp.path}/$timestamp' + '.jpg');
       imageFile.writeAsBytesSync(bytes);
-      Share.shareFiles(['${temp.path}/$timestamp'+'.jpg'], text: 'Wallpaper found on ${Config().appName}\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/reflix',);
+      Share.shareFiles(
+        ['${temp.path}/$timestamp' + '.jpg'],
+        text:
+            'Wallpaper found on ${Config().appName}\nDownload the app from Playstore.\nGet Unlimited HD Wallpapers for FREE : http://onelink.to/reflix',
+      );
       await Future.delayed(Duration(seconds: 2));
       setState(() {
         downloading = false;
-        progress = 'Wallpaper \nShared..❤\n';
+        progress = 'Your Wallpaper is \nShared.\n';
       });
     }
-
   }
 
   Future handleDownload() async {
     final ib = context.read<InternetBloc>();
     await context.read<InternetBloc>().checkInternet();
-    if(ib.hasInternet == true){
-      var path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_PICTURES);
-      await FlutterDownloader.enqueue(
-        url: imageUrl,
-        savedDir: path,
-        fileName: '${Config().appName}-$catagory$timestamp.jpg',
-        showNotification: true, // show download progress in status bar (for Android)
-        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-      );
+    if (ib.hasInternet == true) {
+      openCompleteDialog(true);
+      var response = await Dio()
+          .get(imageUrl!, options: Options(responseType: ResponseType.bytes));
+      final result = await ImageGallerySaver.saveImage(
+          Uint8List.fromList(response.data),
+          quality: 100,
+          name: "${Config().appName}-$catagory$timestamp.jpg");
 
       setState(() {
-        progress = 'Download Complete!\nCheck Your Status Bar';
+        progress = 'Your Wallpaper is \nSaved to Gallery';
       });
-
-      await Future.delayed(Duration(seconds: 2));
-      openCompleteDialog();
-
-    } else{
+    } else {
       setState(() {
         progress = 'Check your internet connection!';
       });
     }
   }
 
-
-
-  @override
-  void initState() {
-    admobHelper.createRewardedAd();
-    FlutterDownloader.registerCallback(downloadCallback);
-    super.initState();
-  }
-
   @override
   void dispose() {
-
     super.dispose();
   }
-
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -388,13 +382,8 @@ class _DetailsPageState extends State<DetailsPage> {
         ));
   }
 
-
-
-
-
   // floating ui
   Widget panelUI(db) {
-
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,12 +393,12 @@ class _DetailsPageState extends State<DetailsPage> {
               padding: EdgeInsets.only(top: 10),
               width: double.infinity,
               child: CircleAvatar(
-                backgroundColor:  Theme.of(context).hoverColor,
+                backgroundColor: Theme.of(context).hoverColor,
                 child: dropIcon,
               ),
             ),
             onTap: () {
-              pc.isPanelClosed() ? pc.open() : pc.close();
+              pc.isPanelClosed ? pc.open() : pc.close();
             },
           ),
           SizedBox(
@@ -429,7 +418,9 @@ class _DetailsPageState extends State<DetailsPage> {
                     Text(
                       '$catagory Wallpaper',
                       style: TextStyle(
-                          color: Theme.of(context).textSelectionTheme.selectionColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor,
                           fontSize: 18,
                           fontWeight: FontWeight.w600),
                     )
@@ -448,7 +439,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           .collection('contents')
                           .doc(timestamp)
                           .snapshots(),
-                      builder: (context, snap) {
+                      builder: (context, AsyncSnapshot snap) {
                         if (!snap.hasData) return _buildLoves(0);
                         return _buildLoves(snap.data['loves']);
                       },
@@ -456,7 +447,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   ],
                 ),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
               ],
             ),
@@ -480,7 +471,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color:Theme.of(context).shadowColor,
+                                  color: Theme.of(context).shadowColor,
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
@@ -490,16 +481,15 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
                       onTap: () async {
-                        final ib =  context.read<InternetBloc>();
+                        final ib = context.read<InternetBloc>();
                         await context.read<InternetBloc>().checkInternet();
                         if (ib.hasInternet == false) {
                           setState(() {
                             progress = 'Check your internet connection!';
                           });
-                        } else{
+                        } else {
                           openSetDialog();
                         }
-
                       },
                     ),
                     SizedBox(
@@ -510,7 +500,10 @@ class _DetailsPageState extends State<DetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color:Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!
+                              .withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -533,25 +526,44 @@ class _DetailsPageState extends State<DetailsPage> {
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
-                        child: Icon(
-                          Icons.download,
-                          color: Colors.white,
-                        ),
+                        child: (isLoading)
+                            ? Transform.scale(
+                                scale: 0.7,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 5.0,
+                                ),
+                              )
+                            : Icon(
+                                Icons.download,
+                                color: Colors.white,
+                              ),
                       ),
-                      onTap: ()   {
+                      onTap: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        context.read<AdsBloc>().showRewardedAd();
 
-                        admobHelper.showRewardedAd(handleStoragePermission());
+                        await Future.delayed(const Duration(seconds: 2));
+                        setState(() {
+                          isLoading = false;
+                        });
+                        handleStoragePermission();
                       },
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
-                      'Download\nWallpaper',
+                      'Save to\nGallery',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!
+                              .withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -574,14 +586,28 @@ class _DetailsPageState extends State<DetailsPage> {
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
-                        child: Icon(
-                          Icons.share,
-                          color: Colors.white,
-                        ),
+                        child: (isShareLoading)
+                            ? Transform.scale(
+                                scale: 0.7,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 5.0,
+                                ),
+                              )
+                            : Icon(
+                                Icons.share,
+                                color: Colors.white,
+                              ),
                       ),
-                      onTap: () {
-
+                      onTap: () async {
                         shareImage();
+                        setState(() {
+                          isShareLoading = true;
+                        });
+                        await Future.delayed(const Duration(seconds: 2));
+                        setState(() {
+                          isShareLoading = false;
+                        });
                       },
                     ),
                     SizedBox(
@@ -592,7 +618,10 @@ class _DetailsPageState extends State<DetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor!
+                              .withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -616,7 +645,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       progress,
                       style: TextStyle(
                           fontSize: 15,
-                          color: Theme.of(context).textSelectionTheme.selectionColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -632,8 +663,10 @@ class _DetailsPageState extends State<DetailsPage> {
 
   Widget _buildLoves(loves) {
     return Text(
-      loves.toString(),
-      style: TextStyle(color: Theme.of(context).textSelectionTheme.selectionColor, fontSize: 16),
+      loves.abs().toString(),
+      style: TextStyle(
+          color: Theme.of(context).textSelectionTheme.selectionColor,
+          fontSize: 16),
     );
   }
 
@@ -647,21 +680,66 @@ class _DetailsPageState extends State<DetailsPage> {
           width: w,
           color: Theme.of(context).shadowColor,
           child: Hero(
-            tag: tag,
-            child: InteractiveViewer(
-              minScale: 0.1,
-              maxScale: 1.6,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover)),
+            tag: tag!,
+            child: GestureDetector(
+              child: InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 1.6,
+                child: CachedNetworkImage(
+                  useOldImageOnUrlChange: true,
+                  imageUrl: imageUrl!,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover)),
+                  ),
+                  placeholder: (context, url) => CachedNetworkImage(
+                    imageUrl: thumbUrl!,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover)),
+                    ),
+                    errorWidget: (context, url, error) => Center(
+                      child: Icon(Icons.error),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => CachedNetworkImage(
+                    imageUrl: thumbUrl!,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Center(
+                      child: Icon(Icons.error),
+                    ),
+                  ),
                 ),
-                placeholder: (context, url) => Icon(Icons.image),
-                errorWidget: (context, url, error) =>
-                    Center(child: Icon(Icons.error)),
               ),
+              onDoubleTap: () {
+                _loveIconPressed();
+                setState(() {
+                  isHeartAnimating = true;
+                  isLiked = true;
+                });
+              },
+            ),
+          ),
+        ),
+        Center(
+          child: Opacity(
+            opacity: isHeartAnimating ? 1 : 0,
+            child: HeartAnimation(
+              isAnimating: isHeartAnimating,
+              duration: Duration(milliseconds: 700),
+              child: FaIcon(
+                FontAwesomeIcons.solidHeart,
+                color: Colors.white,
+                size: 80,
+              ),
+              onEnd: () => setState(() => isHeartAnimating = false),
             ),
           ),
         ),
@@ -670,12 +748,18 @@ class _DetailsPageState extends State<DetailsPage> {
           right: 20,
           child: InkWell(
             child: Container(
-                height: 40,
-                width: 40,
-                decoration:
-                    BoxDecoration(color: Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
-                child: _buildLoveIcon(sb.uid)),
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).bottomAppBarColor,
+                  shape: BoxShape.circle),
+              child: _buildLoveIcon(sb.uid),
+            ),
             onTap: () {
+              setState(() {
+                isHeartAnimating = true;
+                isLiked = true;
+              });
               _loveIconPressed();
             },
           ),
@@ -687,8 +771,9 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Container(
               height: 40,
               width: 40,
-              decoration:
-                  BoxDecoration(color: Theme.of(context).bottomAppBarColor, shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).bottomAppBarColor,
+                  shape: BoxShape.circle),
               child: Icon(
                 Icons.close,
                 size: 25,
@@ -708,7 +793,7 @@ class _DetailsPageState extends State<DetailsPage> {
     if (sb.guestUser == false) {
       return StreamBuilder(
         stream: firestore.collection('users').doc(uid).snapshots(),
-        builder: (context, snap) {
+        builder: (context, AsyncSnapshot snap) {
           if (!snap.hasData) return LoveIcon().greyIcon;
           List d = snap.data['loved items'];
 
@@ -723,9 +808,6 @@ class _DetailsPageState extends State<DetailsPage> {
       return LoveIcon().greyIcon;
     }
   }
-
-
-
 
   _loveIconPressed() async {
     final sb = context.read<SignInBloc>();

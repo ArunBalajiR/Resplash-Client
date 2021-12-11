@@ -16,7 +16,7 @@ import 'package:share/share.dart';
 import 'package:resplash/models/dark_theme_provider.dart';
 
 class DrawerWidget extends StatefulWidget {
-  DrawerWidget({Key key}) : super(key: key);
+  DrawerWidget({Key? key}) : super(key: key);
 
   @override
   _DrawerWidgetState createState() => _DrawerWidgetState();
@@ -43,10 +43,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
   }
 
-  _requestWallpaper() async {
+  _requestHttp(String urlstr) async {
     final Uri params = Uri(
       scheme: 'https',
-      path: 'instagram.com/_u/reflix_walls/',
+      path: urlstr,
     );
 
     var url = params.toString();
@@ -105,13 +105,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   child: Icon(Icons.report_problem,color: Theme.of(context).textSelectionTheme.selectionColor,size: 30,),
                 ),
                 SizedBox(width: 0.8,),
-                Text('Report Wallpaper', style: TextStyle(
+                Expanded(
+                  child: Text('Report Wallpaper', style: TextStyle(
 
-                color: Theme.of(context).textSelectionTheme.selectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
+                ),
+
+
               ),),],
             ),
             content: Text('Wallpapers listed in this app are either from the public domain or Under creative common license or'
-                ' submitted by the users or provided by the artists themselves or original content made by ReSplash Team. '
+                ' submitted by the users or provided by the artists themselves or original content made by ${Config().appName} Team. '
                 'If any wallpaper violates any copyright rule then please report it with a screenshot.',
               style: TextStyle(
                 color: Colors.grey,
@@ -169,156 +173,176 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return Drawer(
-      child: Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: Column(
-            children: <Widget>[
-            SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.only(top:28.0,bottom: 18.0),
-          child: Container(
-            height: 100,
-            width:  double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.transparent,
-                image: DecorationImage(
-                    alignment: Alignment.center,
-                    fit: BoxFit.fitHeight,
-                    image:  AssetImage(Config().splashIcon)
-                )
-            ),),),
+      child: Container(
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: Column(
+              children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top:28.0,bottom: 18.0),
+            child: Container(
+              height: 100,
+              width:  double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  image: DecorationImage(
+                      alignment: Alignment.center,
+                      fit: BoxFit.fitHeight,
+                      image:  AssetImage(Config().splashIcon)
+                  )
+              ),),),
 
-              Text(
-                Config().appName,
-                style: TextStyle(
-                    fontSize: 27,
-                    color: Theme.of(context).textSelectionTheme.selectionColor,
-                    fontWeight: FontWeight.w800),
-              ),
-              SizedBox(height:20),
-              Expanded(
-                child: ListView(
+                Text(
+                  Config().appName,
+                  style: TextStyle(
+                      fontSize: 27,
+                      color: Theme.of(context).textSelectionTheme.selectionColor,
+                      fontWeight: FontWeight.w800),
+                ),
+
+                Expanded(
+                  child: ListView(
+                    children: [
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                        value: themeChange.darkTheme,
+                        secondary:Icon(Icons.dark_mode,color: Colors.grey,),
+                        onChanged: (value) {
+                          setState(() {
+                            themeChange.darkTheme = value;
+                          });
+                        },
+                        title: Text('Dark theme'),
+                      ),
+                      Divider(color: Colors.grey.withOpacity(0.5),),
+                      DrawerTile(
+                        icons: FontAwesomeIcons.info,
+                        title: "About App",
+                        onTaps: (){
+                          nextScreeniOS(context, About());
+                        },
+                      ),
+                      Divider(color: Colors.grey.withOpacity(0.5),),
+                      DrawerTile(
+                        icons: FontAwesomeIcons.share,
+                        title: "Share App",
+                        onTaps: (){
+                          handleLanuch();
+                        },
+                      ),
+                      Divider(color: Colors.grey.withOpacity(0.5),),
+                      DrawerTile(
+                        icons: FontAwesomeIcons.star,
+                        title: "Rate & Review",
+                        onTaps: (){
+                          handleRating();
+                        },
+                      ),
+                      Divider(color: Colors.grey.withOpacity(0.5),),
+                      DrawerTile(
+                        icons: Icons.report_problem,
+                        title: "Report",
+                        onTaps: (){
+                          openReportDialog(context);
+                        },
+                      ),
+
+
+
+                    ],
+                  ),
+                ),
+                Column(
                   children: [
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                      value: themeChange.darkTheme,
-                      secondary:Icon(Icons.dark_mode,color: Colors.grey,),
-                      onChanged: (value) {
-                        setState(() {
-                          themeChange.darkTheme = value;
-                        });
-                      },
-                      title: Text('Dark theme'),
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5),),
-                    DrawerTile(
-                      icons: FontAwesomeIcons.info,
-                      title: "About App",
-                      onTaps: (){
-                        nextScreeniOS(context, About());
-                      },
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5),),
-                    DrawerTile(
-                      icons: FontAwesomeIcons.share,
-                      title: "Share App",
-                      onTaps: (){
-                        handleLanuch();
-                      },
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5),),
-                    DrawerTile(
-                      icons: FontAwesomeIcons.star,
-                      title: "Rate & Review",
-                      onTaps: (){
-                        handleRating();
-                      },
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5),),
-                    DrawerTile(
-                      icons: Icons.report_problem,
-                      title: "Report",
-                      onTaps: (){
-                        openReportDialog(context);
-                      },
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5),),
-                    DrawerTile(
-                      icons: FontAwesomeIcons.instagram,
-                      title: "Follow us on \nInstagram",
-                      onTaps: (){
-                        _requestWallpaper();
-                      },
+                    !context.watch<SignInBloc>().isSignedIn
+                    ? Container()
+                    : Column(
+                      children: [
+                        Divider(color: Colors.grey.withOpacity(0.5),),
+                        InkWell(
+                                child: Container(
+                                  height: 45,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          FontAwesomeIcons.signOutAlt,
+                                          color: Colors.grey,
+                                          size: 22,
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text(
+
+                                          'Logout',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  openLogoutDialog(context);
+                                },
+                              ),
+                        SizedBox(height: 20,),
+                        ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                icon: Icon(FontAwesomeIcons.instagram),
+                                onPressed: () => _requestHttp('instagram.com/_u/reflix_walls/'),
+                              ),
+                              IconButton(
+                                icon: Icon(FontAwesomeIcons.facebook),
+                                onPressed: () => _requestHttp('facebook.com/reflixwalls/'),
+                              ),
+                              IconButton(
+                                icon: Icon(FontAwesomeIcons.twitter),
+                                onPressed: () => _requestHttp('twitter.com/Reflix_walls'),
+                              ),
+                              IconButton(
+                                icon: Icon(FontAwesomeIcons.pinterest),
+                                onPressed: () => _requestHttp('pinterest.com/reflix_walls/'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text("Version : ${Config().appVersion}",style: TextStyle(
+                            color:Colors.grey.shade500,
+                          ),),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-              Column(
-                children: [
-                  !context.watch<SignInBloc>().isSignedIn
-                  ? Container()
-                  : Column(
-                    children: [
-                      Divider(color: Colors.grey.withOpacity(0.5),),
-                      InkWell(
-                              child: Container(
-                                height: 45,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 15),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        FontAwesomeIcons.signOutAlt,
-                                        color: Colors.grey,
-                                        size: 22,
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Text(
-                                        
-                                        'Logout',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.pop(context);
-                                openLogoutDialog(context);
-                              },
-                            ),
-                      SizedBox(height: 20,),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text("Version : ${Config().appVersion}",style: TextStyle(
-                          color:Colors.grey.shade500,
-                        ),),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
 
-            ],
-          )),
+              ],
+            )),
+      ),
     );
   }
 }
 
 class DrawerTile extends StatelessWidget {
   const DrawerTile({
-    Key key,
-    @required this.icons,
-    @required this.title,
-    @required this.onTaps,
+    Key? key,
+    required this.icons,
+    required this.title,
+    required this.onTaps,
   }) : super(key: key);
 
-  final IconData icons;
-  final String title;
-  final Function onTaps;
+  final IconData? icons;
+  final String? title;
+  final VoidCallback? onTaps;
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +363,7 @@ class DrawerTile extends StatelessWidget {
               ),
               Text(
 
-                  title,
+                  title!,
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400))
@@ -347,29 +371,8 @@ class DrawerTile extends StatelessWidget {
           ),
         ),
       ),
-      onTap:onTaps,
+      onTap: onTaps,
     );
   }
 }
 
-
-/*
-*
-* onTap: () {
-                        Navigator.pop(context);
-                        if (index == 0) {
-                            nextScreeniOS(context, CatagoryPage());
-                        } else if (index == 1) {
-                            nextScreeniOS(context, ExplorePage());
-                        } else if (index == 2) {
-
-                            nextScreeniOS(context, BookmarkPage());
-                        } else if (index == 3) {
-                            aboutAppDialog();
-                        } else if (index == 4){
-                          handleLanuch();
-
-                        }else if(index == 5){
-                            handleRating();
-                        }
-* */

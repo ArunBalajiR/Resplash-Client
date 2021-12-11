@@ -3,7 +3,7 @@ import 'package:resplash/widgets/new_items.dart';
 import 'package:resplash/widgets/popular_items.dart';
 
 class ExplorePage extends StatefulWidget {
-  ExplorePage({Key key}) : super(key: key);
+  ExplorePage({Key? key}) : super(key: key);
 
   @override
   _ExplorePageState createState() => _ExplorePageState();
@@ -12,7 +12,7 @@ class ExplorePage extends StatefulWidget {
 class _ExplorePageState extends State<ExplorePage>
     with TickerProviderStateMixin {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  TabController tabController;
+  TabController? tabController;
 
   @override
   void initState() {

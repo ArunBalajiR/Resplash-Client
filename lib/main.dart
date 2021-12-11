@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
@@ -20,17 +19,16 @@ List<String> testDeviceIds = ['D4D86FDE7CB34417834875CD469C2567'];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FlutterDownloader.initialize(debug: true);
-  AdsBloc.initialization();
   //----
   RequestConfiguration configuration = RequestConfiguration(testDeviceIds: testDeviceIds);
   MobileAds.instance.updateRequestConfiguration(configuration);
+  MobileAds.instance.initialize();
   //---
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -54,6 +52,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -74,8 +73,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<InternetBloc>(
           create: (context) => InternetBloc(),
         ),
+        ChangeNotifierProvider<AdsBloc>(
+          create: (context) => AdsBloc(),
+        ),
       ],
       child: Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
+
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme:Styles.themeData(themeChangeProvider.darkTheme, context),
@@ -87,7 +90,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyApp1 extends StatelessWidget {
-  const MyApp1({Key key}) : super(key: key);
+  const MyApp1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,3 +100,4 @@ class MyApp1 extends StatelessWidget {
         : HomePage();
   }
 }
+// java -jar bundletool.jar build-apks --bundle=build\app\outputs\bundle\release\app-release.aab --output=reflix_app.apks --mode=universal

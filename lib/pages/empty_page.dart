@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class EmptyPage extends StatelessWidget {
   final String title;
-  final String subTitle;
+  final String? subTitle;
   final icon;
-  const EmptyPage({Key key, @required this.title, this.subTitle, @required this.icon}) : super(key: key);
+  const EmptyPage({Key? key, required this.title, this.subTitle, required this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

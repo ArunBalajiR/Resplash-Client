@@ -13,8 +13,8 @@ import '../utils/next_screen.dart';
 import '../utils/snacbar.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key key, this.closeDialog}) : super(key: key);
-  final bool closeDialog;
+  const SignInPage({Key? key,this.closeDialog}) : super(key: key);
+  final bool? closeDialog;
 
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -226,9 +226,10 @@ class _SignInPageState extends State<SignInPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(
+                      Flexible(
                         child: Text(
                           "To the land of handpicked retouch wallpapers",
+                          maxLines: 2,
                           style: GoogleFonts.rubik(
                             fontSize: 20,
                             color: Colors.white,
@@ -257,12 +258,15 @@ class _SignInPageState extends State<SignInPage> {
                       SizedBox(
                         width: 15,
                       ),
-                      Text(
-                        'Sign In with Google',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white),
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          'Sign In with Google',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
                       )
                     ],
                   ),

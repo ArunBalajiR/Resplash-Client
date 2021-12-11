@@ -1,21 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../blocs/data_bloc.dart';
 import '../pages/catagory_items.dart';
+
 class CatagoryPage extends StatefulWidget {
-  CatagoryPage({Key key}) : super(key: key);
+  CatagoryPage({Key? key}) : super(key: key);
 
   @override
   _CatagoryPageState createState() => _CatagoryPageState();
 }
 
 class _CatagoryPageState extends State<CatagoryPage> {
-
-
-
-
 
   @override
   Widget build(BuildContext context) {

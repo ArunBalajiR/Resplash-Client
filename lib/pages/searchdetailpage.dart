@@ -1,34 +1,35 @@
 // details page
+import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:fzwallpaper/fzwallpaper.dart';
+import 'package:wallpaper/wallpaper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
 import 'package:share/share.dart';
-import 'package:resplash/blocs/sign_in_bloc.dart';
 import '../blocs/data_bloc.dart';
 import '../blocs/internet_bloc.dart';
 import '../models/config.dart';
 import '../utils/circular_button.dart';
 
 class SearchDetailsPage extends StatefulWidget {
-  final String tag;
-  final String imageUrl;
-  final String catagory;
-  final String timestamp;
+  final String? tag;
+  final String? imageUrl;
+  final String? catagory;
+  final String? timestamp;
 
   SearchDetailsPage(
-      {Key key,
-        @required this.tag,
+      {Key? key,
+        required this.tag,
         this.imageUrl,
         this.catagory,
         this.timestamp})
@@ -42,25 +43,32 @@ class SearchDetailsPage extends StatefulWidget {
 class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
 
-  String tag;
-  String imageUrl;
-  String catagory;
-  String timestamp;
+  String? tag;
+  String? imageUrl;
+  String? catagory;
+  String? timestamp;
   _SearchDetailsPageState(this.tag, this.imageUrl, this.catagory, this.timestamp);
 
 
-  AdsBloc admobHelper = new AdsBloc();
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String progress = 'Set as Wallpaper or Download';
   bool downloading = false;
-  Stream<String> progressString;
+  late Stream<String> progressString;
   Icon dropIcon = Icon(Icons.arrow_upward);
   Icon upIcon = Icon(Icons.arrow_upward);
   Icon downIcon = Icon(Icons.arrow_downward);
   // Icon heartIcon = LoveIcon().greyIcon;
   bool isPresseed = false;
   PanelController pc = PanelController();
-  PermissionStatus status;
+  PermissionStatus? status;
+  bool isLoading = false;
+  bool isShareLoading = false;
+
+  Future initAdmobRewardAd() async{
+    await MobileAds.instance.initialize();
+    context.read<AdsBloc>().loadAdmobARewardad();
+  }
 
   void openSetDialog() async {
     showDialog(
@@ -123,7 +131,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         ? setState(() {
       progress = 'iOS is not supported';
     })
-        : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
+        : progressString = Wallpaper.imageDownloadProgress(imageUrl!);
     progressString.listen((data) {
       setState(() {
         downloading = true;
@@ -131,13 +139,13 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
       });
       print("DataReceived: " + data);
     }, onDone: () async {
-      progress = await Fzwallpaper.lockScreen();
+      progress = await Wallpaper.lockScreen();
       setState(() {
         downloading = false;
         progress = progress;
       });
-      admobHelper.createInterad();
-      openCompleteDialog();
+
+      openCompleteDialog(false);
     }, onError: (error) {
       setState(() {
         downloading = false;
@@ -152,7 +160,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         ? setState(() {
       progress = 'iOS is not supported';
     })
-        : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
+        : progressString = Wallpaper.imageDownloadProgress(imageUrl!);
     progressString.listen((data) {
       setState(() {
         //res = data;
@@ -161,13 +169,13 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
       });
       print("DataReceived: " + data);
     }, onDone: () async {
-      progress = await Fzwallpaper.homeScreen();
+      progress = await Wallpaper.homeScreen();
       setState(() {
         downloading = false;
         progress = progress;
       });
-      admobHelper.createInterad();
-      openCompleteDialog();
+
+      openCompleteDialog(false);
     }, onError: (error) {
       setState(() {
         downloading = false;
@@ -182,7 +190,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         ? setState(() {
       progress = 'iOS is not supported';
     })
-        : progressString = Fzwallpaper.imageDownloadProgress(imageUrl);
+        : progressString = Wallpaper.imageDownloadProgress(imageUrl!);
     progressString.listen((data) {
       setState(() {
         downloading = true;
@@ -190,13 +198,13 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
       });
       print("DataReceived: " + data);
     }, onDone: () async {
-      progress = await Fzwallpaper.bothScreen();
+      progress = await Wallpaper.bothScreen();
       setState(() {
         downloading = false;
         progress = progress;
       });
-      admobHelper.createInterad();
-      openCompleteDialog();
+
+      openCompleteDialog(false);
     }, onError: (error) {
       setState(() {
         downloading = false;
@@ -221,7 +229,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
 
 
-  void openCompleteDialog() async {
+  void openCompleteDialog(bool isDownload) async {
     AwesomeDialog(
         context: context,
         dialogType: DialogType.SUCCES,
@@ -234,7 +242,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
               alignment: Alignment.center,
               height: 80,
               child: Text(
-                progress,
+                isDownload ? "Wallpaper Saved \nto Gallery" : progress,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               )),
         ),
@@ -242,7 +250,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         dismissOnTouchOutside: false,
         dismissOnBackKeyPress: false,
         btnOkOnPress: () {
-          admobHelper.showInterad();
+          isDownload ? null : context.read<AdsBloc>().showInterstitialAdAdmob();
         }).show();
   }
 
@@ -284,7 +292,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
         downloading = true;
         progress = 'Sharing your wallpaper is in\nProgress...';
       });
-      final response = await get(imageUrl);
+      final response = await get(Uri.parse(imageUrl!));
       final bytes = response.bodyBytes;
       final Directory temp = await getTemporaryDirectory();
       final File imageFile = File('${temp.path}/$timestamp'+'.jpg');
@@ -293,7 +301,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
       await Future.delayed(Duration(seconds: 2));
       setState(() {
         downloading = false;
-        progress = 'Wallpaper \nShared..❤\n';
+        progress = 'Wallpaper \nShared.\n';
       });
     }
 
@@ -303,21 +311,20 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
     final ib = context.read<InternetBloc>();
     await context.read<InternetBloc>().checkInternet();
     if(ib.hasInternet == true){
-      var path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_PICTURES);
-      await FlutterDownloader.enqueue(
-        url: imageUrl,
-        savedDir: path,
-        fileName: '${Config().appName}-$catagory$timestamp.jpg',
-        showNotification: true, // show download progress in status bar (for Android)
-        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-      );
-
+      var response = await Dio().get(
+          imageUrl!,
+          options: Options(responseType: ResponseType.bytes));
+      final result = await ImageGallerySaver.saveImage(
+          Uint8List.fromList(response.data),
+          quality: 100,
+          name: "${Config().appName}-$catagory$timestamp.jpg");
+      print(result);
       setState(() {
-        progress = 'Download Complete!\nCheck Your Status Bar';
+        progress = 'Saved to Gallery';
       });
 
       await Future.delayed(Duration(seconds: 2));
-      openCompleteDialog();
+      openCompleteDialog(true);
 
     } else{
       setState(() {
@@ -328,13 +335,12 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
   @override
   void initState() {
-    admobHelper.createRewardedAd();
+    initAdmobRewardAd();
     super.initState();
   }
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -389,7 +395,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
               ),
             ),
             onTap: () {
-              pc.isPanelClosed() ? pc.open() : pc.close();
+              pc.isPanelClosed ? pc.open() : pc.close();
             },
           ),
           SizedBox(
@@ -471,7 +477,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                          color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -494,25 +500,41 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
-                        child: Icon(
+                        child: (isLoading) ?
+                        Transform.scale(
+                          scale: 0.7,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 5.0,
+                          ),
+                        )
+                            : Icon(
                           Icons.download,
                           color: Colors.white,
                         ),
                       ),
-                      onTap: () {
-
-                        admobHelper.showRewardedAd(handleStoragePermission());
+                      onTap: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        context.read<AdsBloc>().showRewardedAd();
+                        await Future.delayed(const Duration(seconds: 2));
+                        setState(() {
+                          isLoading = false;
+                        });
+                        handleStoragePermission();
+                        // admobHelper.showRewardedAd(handleStoragePermission());
                       },
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
-                      'Download\n Wallpaper',
+                      'Save to\nGallery',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                          color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -535,13 +557,28 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                                   blurRadius: 10,
                                   offset: Offset(2, 2))
                             ]),
-                        child: Icon(
+                        child:  (isShareLoading) ?
+                        Transform.scale(
+                          scale: 0.7,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 5.0,
+                          ),
+                        )
+                        : Icon(
                           Icons.share,
                           color: Colors.white,
                         ),
                       ),
-                      onTap: () {
+                      onTap: () async {
                         shareImage();
+                        setState(() {
+                          isShareLoading = true;
+                        });
+                        await Future.delayed(const Duration(seconds: 2));
+                        setState(() {
+                          isShareLoading = false;
+                        });
                       },
                     ),
                     SizedBox(
@@ -552,7 +589,7 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).textSelectionTheme.selectionColor.withOpacity(0.7),
+                          color: Theme.of(context).textSelectionTheme.selectionColor!.withOpacity(0.7),
                           fontWeight: FontWeight.w600),
                     )
                   ],
@@ -594,7 +631,6 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
 
   // background ui
   Widget panelBodyUI(h, w) {
-    final SignInBloc sb = Provider.of<SignInBloc>(context, listen: false);
     return Stack(
       children: <Widget>[
         Container(
@@ -602,12 +638,12 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
           width: w,
           color: Theme.of(context).shadowColor,
           child: Hero(
-            tag: tag,
+            tag: tag!,
             child: InteractiveViewer(
               minScale: 0.1,
               maxScale: 1.6,
               child: CachedNetworkImage(
-                imageUrl: imageUrl,
+                imageUrl: imageUrl!,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(

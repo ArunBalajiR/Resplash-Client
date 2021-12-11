@@ -1,11 +1,16 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:resplash/blocs/ads_bloc.dart';
 import 'package:resplash/blocs/sign_in_bloc.dart';
 import 'package:resplash/pages/search.dart';
@@ -23,7 +28,7 @@ import '../widgets/loading_animation.dart';
 import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -32,8 +37,60 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int listIndex = 0;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   AdsBloc admobHelper = new AdsBloc();
+
+  RateMyApp rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 1,
+    minLaunches: 3,
+    remindDays: 1,
+    remindLaunches: 3,
+    googlePlayIdentifier: Config().packageName,
+  );
+
+  void rateReflix(){
+    rateMyApp.init().then((_) {
+      if (rateMyApp.shouldOpenDialog) {
+        rateMyApp.showRateDialog(
+          context,
+          title: 'Rate us in Playstore',
+          message: 'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.', // The dialog message.
+          rateButton: 'RATE', // The dialog "rate" button text.
+          listener: (button) { // The button click listener (useful if you want to cancel the click event).
+            switch(button) {
+              case RateMyAppDialogButton.rate:
+                LaunchReview.launch(
+                    androidAppId: Config().packageName,
+                    iOSAppId: null,
+                    writeReview: true
+                );
+                break;
+              case RateMyAppDialogButton.later:
+                print('Clicked on "Later".');
+                break;
+              case RateMyAppDialogButton.no:
+                print('Clicked on "No".');
+                break;
+            }
+
+            return true; // Return false if you want to cancel the click event.
+          },
+          ignoreNativeDialog: Platform.isAndroid, // Set to false if you want to show the Apple's native app rating dialog on iOS or Google's native app rating dialog (depends on the current Platform).
+          dialogStyle: DialogStyle(
+
+                dialogShape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+                 messagePadding: EdgeInsets.all(10.0),
+                titleStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,),
+
+          ),
+          onDismissed: () => rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed),
+        );
+      }
+    });
+  }
 
   Future getData() async {
     Future.delayed(Duration(milliseconds: 0)).then((f) {
@@ -46,12 +103,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future initAdmobAd() async{
+    await MobileAds.instance.initialize();
+    context.read<AdsBloc>().loadAdmobInterstitialAd();
+  }
+
+
+
+
+
+  Future _getStoragePermission() async {
+    await Permission.storage.request();
+  }
+
+
   @override
   void initState() {
-    OneSignal.shared.init(Config().onesignalAppId);
-    getData();
-
     super.initState();
+    initOneSignal();
+    getData();
+    rateReflix();
+    initAdmobAd();
+
+    _getStoragePermission();
+  }
+
+  initOneSignal (){
+    OneSignal.shared.setAppId(Config().onesignalAppId);
   }
 
   @override
@@ -66,6 +144,7 @@ class _HomePageState extends State<HomePage> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Theme.of(context).primaryColor,
       statusBarColor: Colors.transparent,
+        // ignore: deprecated_member_use
         statusBarIconBrightness: Theme.of(context).accentColorBrightness,
 
     ));
@@ -95,7 +174,8 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                                 fontSize: 27,
                                 color: Theme.of(context).textSelectionTheme.selectionColor,
-                                fontWeight: FontWeight.w800),
+                                fontWeight: FontWeight.w800,
+                            ),
                           ),
                           Spacer(),
                           InkWell(
@@ -105,24 +185,14 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.grey[300],
-                                  image: DecorationImage(
-                                      image: CachedNetworkImageProvider(!context
-                                                  .watch<SignInBloc>()
-                                                  .isSignedIn ||
-                                              context
-                                                      .watch<SignInBloc>()
-                                                      .imageUrl ==
-                                                  null
-                                          ? Config().guestUserImage
-                                          : context
-                                              .watch<SignInBloc>()
-                                              .imageUrl))),
+                                  image: !context.watch<SignInBloc>().isSignedIn || context.watch<SignInBloc>().imageUrl == null
+                                      ? DecorationImage(image: CachedNetworkImageProvider(Config().guestUserImage))
+                                      : DecorationImage(image: CachedNetworkImageProvider(context.watch<SignInBloc>().imageUrl!))),
                             ),
                             onTap: () {
                               !sb.isSignedIn
                                   ? showGuestUserInfo(context)
-                                  : showUserInfo(
-                                      context, sb.name, sb.email, sb.imageUrl);
+                                  : showUserInfo(context, sb.name, sb.email, sb.imageUrl,);
                             },
                           ),
                           SizedBox(
@@ -134,110 +204,92 @@ class _HomePageState extends State<HomePage> {
                               size: 20,
                             ),
                             onPressed: () {
-                              _scaffoldKey.currentState.openEndDrawer();
+                              _scaffoldKey.currentState!.openEndDrawer();
                             },
-                          )
+                          ),
                         ],
-                      )),
-                  Stack(
-                    children: <Widget>[
-                      CarouselSlider(
-                        options: CarouselOptions(
+                      ),),
+                      Stack(
+                        children: <Widget>[
+                          CarouselSlider(
+                            options: CarouselOptions(
                             enlargeStrategy: CenterPageEnlargeStrategy.height,
                             initialPage: 0,
                             viewportFraction: 0.90,
                             enlargeCenterPage: true,
                             enableInfiniteScroll: false,
-                            height: h * 0.72,
+                            height: h * 0.71,
                             onPageChanged: (int index, reason) {
                               setState(() => listIndex = index);
                             }),
-                        items: db.alldata.length == 0
-                            ? [0, 1]
-                                .take(1)
-                                .map((f) => LoadingWidget())
-                                .toList()
+                            items: db.alldata.length == 0 ? [0, 1].take(1).map((f) => LoadingWidget()).toList()
                             : db.alldata.map((i) {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
-                                      width:
-                                          MediaQuery.of(context).size.width,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 0),
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: EdgeInsets.symmetric(horizontal: 0),
                                       child: InkWell(
                                         child: CachedNetworkImage(
-                                          imageUrl: i['image url'],
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Hero(
+                                          imageUrl: i['thumbnail url'],
+                                          imageBuilder: (context, imageProvider) => Hero(
                                             tag: i['timestamp'],
                                             child: Container(
                                               margin: EdgeInsets.only(
                                                   left: 10,
                                                   right: 10,
                                                   top: 10,
-                                                  bottom: 50),
+                                                  bottom: 50,
+                                              ),
                                               decoration: BoxDecoration(
                                                   color:Theme.of(context).shadowColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20),
+                                                  borderRadius: BorderRadius.circular(20),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color:Theme.of(context).shadowColor
-                                                            ,
+                                                        color:Theme.of(context).shadowColor,
                                                         blurRadius: 30,
-
-                                                        offset: Offset(5, 20),)
+                                                        offset: Offset(5, 20),
+                                                    ),
                                                   ],
                                                   image: DecorationImage(
                                                       image: imageProvider,
-                                                      fit: BoxFit.cover),),
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 30,
-                                                          bottom: 40),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .end,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:const EdgeInsets.only(left: 20,bottom: 30),
+                                                    child: Row(
+                                                    crossAxisAlignment:CrossAxisAlignment.end,
                                                     children: <Widget>[
                                                       Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        mainAxisAlignment:MainAxisAlignment.end,
+                                                        crossAxisAlignment:CrossAxisAlignment.start,
                                                         children: <Widget>[
                                                               Material(
                                                                 type : MaterialType.transparency,
-                                                                child: Text(
-                                                                Config().homePageText,
+                                                                child: FittedBox(
 
-                                                                style: GoogleFonts.greatVibes(
-
-                                                                color: Colors.white,
-                                                                fontSize: 25,
-                                                                fontWeight: FontWeight.bold
-                                                                ),
+                                                                  fit: BoxFit.cover,
+                                                                  child : Text(
+                                                                    Config().homePageText,
+                                                                    style: GoogleFonts.greatVibes(
+                                                                      color: Colors.white,
+                                                                      fontSize: 25,
+                                                                      fontWeight: FontWeight.bold,
+                                                                     ),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                                Material(
-                                                                  type: MaterialType.transparency,
-                                                                  child: Text(
-                                                            i['category'],
-                                                            style: TextStyle(
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .none,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 14),
-                                                          ),
+                                                              Material(
+                                                                type: MaterialType.transparency,
+                                                                child: Text(i['category'],
+                                                                  style: TextStyle(
+                                                                  decoration:TextDecoration.none,
+                                                                  color: Colors.white,
+                                                                  fontSize: 14,
+                                                                 ),
                                                                 ),
+                                                              ),
 
                                                         ],
                                                       ),
@@ -249,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       SizedBox(width: 2),
                                                       Text(
-                                                        i['loves'].toString(),
+                                                        i['loves'].abs().toString(),
                                                         style: TextStyle(
                                                             decoration:TextDecoration.none,
                                                             color: Colors.white.withOpacity(0.7),
@@ -258,15 +310,13 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       SizedBox(
                                                         width: 15,
-                                                      )
+                                                      ),
                                                     ],
-                                                  )),
+                                                  ),),
                                             ),
                                           ),
-                                          placeholder: (context, url) =>
-                                              LoadingWidget(),
-                                          errorWidget:
-                                              (context, url, error) => Icon(
+                                          placeholder: (context, url) =>LoadingWidget(),
+                                          errorWidget:(context, url, error) => Icon(
                                             Icons.error,
                                             size: 40,
                                           ),
@@ -278,6 +328,7 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context) =>
                                                   DetailsPage(
                                                 tag: i['timestamp'],
+                                                thumbUrl: i['thumbnail url'],
                                                 imageUrl: i['image url'],
                                                 catagory: i['category'],
                                                 timestamp: i['timestamp'],
@@ -358,7 +409,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BookmarkPage(),
+                                builder: (context) => BookmarkPage(userUID: context.read<SignInBloc>().uid),
                               ),
                             );
                           },

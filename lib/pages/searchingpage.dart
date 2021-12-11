@@ -6,18 +6,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/src/provider.dart';
 import 'package:resplash/pages/empty_page.dart';
 import 'package:resplash/pages/internet.dart';
 import 'package:resplash/pages/searchdetailpage.dart';
 import '../models/config.dart';
 import '../widgets/cached_image.dart';
+import 'package:resplash/blocs/ads_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class SearchItem extends StatefulWidget {
   final String searchKeyword;
 
-  SearchItem({Key key, @required this.searchKeyword})
+  SearchItem({Key? key, required this.searchKeyword})
       : super(key: key);
+
+
 
   @override
   _SearchItemState createState() => _SearchItemState();
@@ -29,8 +34,12 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
   List apikeys=[Config().pexelsKey];
   List<ApiData> data =[];
   List pageIndex= ["1","3","5","7","9"];
-  bool _isLoading;
+  late bool _isLoading;
 
+  Future initAdmobAd() async{
+    await MobileAds.instance.initialize();
+    context.read<AdsBloc>().loadAdmobInterstitialAd();
+  }
 
 
   Future getWallPaper()async{
@@ -38,7 +47,7 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
     var url="https://api.pexels.com/v1/search?query=${widget.searchKeyword}&per_page=400&page=${pageIndex[Random().nextInt(pageIndex.length)]}";
     try{
       var apikey =apikeys[Random().nextInt(apikeys.length)];
-      await http.get(url,
+      await http.get(Uri.parse(url),
           headers:{
             "Authorization" : apikey
           }).timeout(const Duration(seconds: 5)).then((value){
@@ -67,8 +76,11 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     _isLoading = true;
+    initAdmobAd();
     super.initState();
   }
+
+
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -79,6 +91,7 @@ class _SearchItemState extends State<SearchItem> with AutomaticKeepAliveClientMi
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         key: scaffoldKey,
         centerTitle: false,
         title: Text(
